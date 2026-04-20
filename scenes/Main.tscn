@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dnj38oxl4tgbw"]
+[gd_scene load_steps=8 format=3 uid="uid://dnj38oxl4tgbw"]
 
 [ext_resource type="Script" path="res://scripts/Game/Main.cs" id="1_3lmcg"]
 [ext_resource type="PackedScene" uid="uid://b2xj8oxl9tgbw" path="res://scenes/panels/ImagePanel.tscn" id="2_image"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://d4zk1qxl3tgbw" path="res://scenes/panels/StatusPanel.tscn" id="4_status"]
 [ext_resource type="PackedScene" uid="uid://e5al2rxl4tgbw" path="res://scenes/panels/InventoryPanel.tscn" id="5_inventory"]
 [ext_resource type="PackedScene" uid="uid://f6bm3sxl5tgbw" path="res://scenes/panels/ChoicesPanel.tscn" id="6_choices"]
+[ext_resource type="PackedScene" uid="uid://cj1mk4xl6tgbw" path="res://scenes/panels/DiceRollDialog.tscn" id="7_dice"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -107,3 +108,18 @@ unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(150, 0)
 text = "Language: English"
+
+[node name="SaveButton" type="Button" parent="MainLayout/DebugStatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(60, 0)
+text = "Save"
+
+[node name="LoadButton" type="Button" parent="MainLayout/DebugStatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(60, 0)
+text = "Load"
+
+[node name="DiceRollDialog" parent="." instance=ExtResource("7_dice")]
+unique_name_in_owner = true

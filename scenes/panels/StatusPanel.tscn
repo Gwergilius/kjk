@@ -53,3 +53,27 @@ text = "Luck: 10"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Gold: 25"
+
+[node name="HSeparator2" type="HSeparator" parent="StatusContainer"]
+layout_mode = 2
+
+[node name="ActionButtons" type="VBoxContainer" parent="StatusContainer"]
+layout_mode = 2
+
+[node name="RollStatsButton" type="Button" parent="StatusContainer/ActionButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Roll New Stats"
+custom_minimum_size = Vector2(0, 25)
+
+[node name="TestLuckButton" type="Button" parent="StatusContainer/ActionButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Test Your Luck"
+custom_minimum_size = Vector2(0, 25)
+
+[node name="EatProvisionsButton" type="Button" parent="StatusContainer/ActionButtons"]
+unique_name_in_owner = true  
+layout_mode = 2
+text = "Eat Provisions"
+custom_minimum_size = Vector2(0, 25)
