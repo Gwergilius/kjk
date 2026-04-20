@@ -1,0 +1,19 @@
+<Project Sdk="Godot.NET.Sdk/4.6.2">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>TalismanOfDeath</RootNamespace>
+    <AssemblyName>TalismanOfDeath</AssemblyName>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="scripts\Game\" />
+    <Folder Include="scripts\UI\" />
+    <Folder Include="scripts\Data\" />
+  </ItemGroup>
+</Project>
