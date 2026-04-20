@@ -1,0 +1,292 @@
+[gd_scene format=3 uid="uid://cbblxsbv8c5am"]
+
+[ext_resource type="Script" path="res://scripts/Game/Main.cs" id="1_3lmcg"]
+[ext_resource type="PackedScene" uid="uid://b2xj8oxl9tgbw" path="res://scenes/panels/ImagePanel.tscn" id="2_image"]
+[ext_resource type="PackedScene" uid="uid://c3yj9pxl2tgbw" path="res://scenes/panels/StoryPanel.tscn" id="3_story"]
+[ext_resource type="PackedScene" uid="uid://d4zk1qxl3tgbw" path="res://scenes/panels/StatusPanel.tscn" id="4_status"]
+[ext_resource type="PackedScene" uid="uid://e5al2rxl4tgbw" path="res://scenes/panels/InventoryPanel.tscn" id="5_inventory"]
+[ext_resource type="PackedScene" uid="uid://f6bm3sxl5tgbw" path="res://scenes/panels/ChoicesPanel.tscn" id="6_choices"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_3lmcg")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.15, 0.1, 0.05, 1)
+
+[node name="MainLayout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="TitleBar" type="HBoxContainer" parent="MainLayout"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MainLayout/TitleBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TALISMAN OF DEATH"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainLayout"]
+layout_mode = 2
+
+[node name="GameArea" type="HSplitContainer" parent="MainLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+split_offset = 700
+
+[node name="LeftPanel" type="VBoxContainer" parent="MainLayout/GameArea"]
+layout_mode = 2
+
+[node name="ImagePanel" parent="MainLayout/GameArea/LeftPanel" instance=ExtResource("2_image")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="MainLayout/GameArea/LeftPanel"]
+layout_mode = 2
+
+[node name="StoryPanel" parent="MainLayout/GameArea/LeftPanel" instance=ExtResource("3_story")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RightPanel" type="VBoxContainer" parent="MainLayout/GameArea"]
+layout_mode = 2
+custom_minimum_size = Vector2(320, 0)
+
+[node name="StatusPanel" parent="MainLayout/GameArea/RightPanel" instance=ExtResource("4_status")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="MainLayout/GameArea/RightPanel"]
+layout_mode = 2
+
+[node name="InventoryPanel" parent="MainLayout/GameArea/RightPanel" instance=ExtResource("5_inventory")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VSeparator2" type="VSeparator" parent="MainLayout/GameArea/RightPanel"]
+layout_mode = 2
+
+[node name="ChoicesPanel" parent="MainLayout/GameArea/RightPanel" instance=ExtResource("6_choices")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator6" type="HSeparator" parent="MainLayout"]
+layout_mode = 2
+
+[node name="DebugStatusBar" type="HBoxContainer" parent="MainLayout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 30)
+
+[node name="SectionLabel" type="Label" parent="MainLayout/DebugStatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Section: 1"
+vertical_alignment = 1
+
+[node name="LanguageButton" type="Button" parent="MainLayout/DebugStatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+text = "Language: English"
+custom_minimum_size = Vector2(0, 300)
+
+[node name="SectionImagePlaceholder" type="Button" parent="MainLayout/GameArea/LeftPanel/ImageArea"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "[Section Image]"
+
+[node name="ImageLabel" type="Label" parent="MainLayout/GameArea/LeftPanel/ImageArea/SectionImagePlaceholder"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -12.0
+offset_right = 60.0
+offset_bottom = 12.0
+text = "[Section Image]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="MainLayout/GameArea/LeftPanel"]
+layout_mode = 2
+
+[node name="StoryArea" type="ScrollContainer" parent="MainLayout/GameArea/LeftPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StoryText" type="RichTextLabel" parent="MainLayout/GameArea/LeftPanel/StoryArea"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[center]Loading story...[/center]"
+fit_content = true
+scroll_active = false
+
+[node name="RightPanel" type="VBoxContainer" parent="MainLayout/GameArea"]
+layout_mode = 2
+custom_minimum_size = Vector2(320, 0)
+
+[node name="StatusPanel" type="Panel" parent="MainLayout/GameArea/RightPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 150)
+
+[node name="StatusContainer" type="VBoxContainer" parent="MainLayout/GameArea/RightPanel/StatusPanel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="StatusTitle" type="Label" parent="MainLayout/GameArea/RightPanel/StatusPanel/StatusContainer"]
+layout_mode = 2
+text = "STATUS"
+horizontal_alignment = 1
+
+[node name="HSeparator3" type="HSeparator" parent="MainLayout/GameArea/RightPanel/StatusPanel/StatusContainer"]
+layout_mode = 2
+
+[node name="SkillLabel" type="Label" parent="MainLayout/GameArea/RightPanel/StatusPanel/StatusContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Skill:         10"
+
+[node name="StaminaLabel" type="Label" parent="MainLayout/GameArea/RightPanel/StatusPanel/StatusContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Stamina:    18"
+
+[node name="LuckLabel" type="Label" parent="MainLayout/GameArea/RightPanel/StatusPanel/StatusContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Luck:         11"
+
+[node name="VSeparator" type="VSeparator" parent="MainLayout/GameArea/RightPanel"]
+layout_mode = 2
+
+[node name="InventoryPanel" type="Panel" parent="MainLayout/GameArea/RightPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="InventoryContainer" type="VBoxContainer" parent="MainLayout/GameArea/RightPanel/InventoryPanel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="InventoryTitle" type="Label" parent="MainLayout/GameArea/RightPanel/InventoryPanel/InventoryContainer"]
+layout_mode = 2
+text = "INVENTORY"
+horizontal_alignment = 1
+
+[node name="HSeparator4" type="HSeparator" parent="MainLayout/GameArea/RightPanel/InventoryPanel/InventoryContainer"]
+layout_mode = 2
+
+[node name="GoldLabel" type="Label" parent="MainLayout/GameArea/RightPanel/InventoryPanel/InventoryContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Gold:           25 gp"
+
+[node name="ItemsLabel" type="Label" parent="MainLayout/GameArea/RightPanel/InventoryPanel/InventoryContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Items:           Sword, Provisions"
+
+[node name="VSeparator2" type="VSeparator" parent="MainLayout/GameArea/RightPanel"]
+layout_mode = 2
+
+[node name="ChoicesPanel" type="Panel" parent="MainLayout/GameArea/RightPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ChoicesContainer" type="VBoxContainer" parent="MainLayout/GameArea/RightPanel/ChoicesPanel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="ChoicesTitle" type="Label" parent="MainLayout/GameArea/RightPanel/ChoicesPanel/ChoicesContainer"]
+layout_mode = 2
+text = "CHOICES"
+horizontal_alignment = 1
+
+[node name="HSeparator5" type="HSeparator" parent="MainLayout/GameArea/RightPanel/ChoicesPanel/ChoicesContainer"]
+layout_mode = 2
+
+[node name="Choice1" type="RichTextLabel" parent="MainLayout/GameArea/RightPanel/ChoicesPanel/ChoicesContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+mouse_filter = 1
+text = "[1] Choice 1"
+
+[node name="Choice2" type="RichTextLabel" parent="MainLayout/GameArea/RightPanel/ChoicesPanel/ChoicesContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+mouse_filter = 1
+text = "[2] Choice 2"
+
+[node name="HSeparator6" type="HSeparator" parent="MainLayout"]
+layout_mode = 2
+
+[node name="DebugStatusBar" type="HBoxContainer" parent="MainLayout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 30)
+
+[node name="SectionLabel" type="Label" parent="MainLayout/DebugStatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Section: 1"
+vertical_alignment = 1
+
+[node name="LanguageButton" type="Button" parent="MainLayout/DebugStatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+text = "Language: English"
