@@ -144,12 +144,12 @@ public partial class Main : Control
 
         if (_sections.TryGetValue(sectionId, out var sectionData))
         {
-            // Build section text
-            var sectionText = $"[center][b]{sectionId}.[/b][/center]\n\n";
+            // Build section text (without section number prefix)
+            string sectionText;
             
             if (sectionData.TextKey == "SECTION_NOT_IMPLEMENTED")
             {
-                sectionText += $"[color=red]{_localizationManager.GetText(sectionData.TextKey)}[/color]\n\n";
+                sectionText = $"[color=red]{_localizationManager.GetText(sectionData.TextKey)}[/color]\n\n";
                 if (!string.IsNullOrEmpty(sectionData.AdditionalTextKey))
                 {
                     sectionText += _localizationManager.GetText(sectionData.AdditionalTextKey, sectionData.AdditionalTextArgs ?? new object[0]);
@@ -157,7 +157,7 @@ public partial class Main : Control
             }
             else
             {
-                sectionText += _localizationManager.GetText(sectionData.TextKey);
+                sectionText = _localizationManager.GetText(sectionData.TextKey);
             }
             
             _storyText!.Text = sectionText;
@@ -202,10 +202,10 @@ public partial class Main : Control
         {
             var choice = choices[i];
             
-            // Create clickable choice container
+            // Create clickable choice container with dynamic sizing
             var choiceContainer = new Panel
             {
-                CustomMinimumSize = new Vector2(0, 40),
+                SizeFlagsVertical = Control.SizeFlags.ShrinkCenter,
                 MouseFilter = Control.MouseFilterEnum.Pass
             };
             
@@ -215,6 +215,8 @@ public partial class Main : Control
                 FitContent = true,
                 ScrollActive = false,
                 MouseFilter = Control.MouseFilterEnum.Ignore,
+                SizeFlagsVertical = Control.SizeFlags.ShrinkCenter,
+                CustomMinimumSize = new Vector2(280, 0),
                 Text = $"[color=white]{i + 1}. {_localizationManager.GetText(choice.TextKey)}[/color]"
             };
             
