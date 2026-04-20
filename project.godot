@@ -19,6 +19,8 @@ config/features=PackedStringArray("4.6", "C#")
 
 window/size/viewport_width=1024
 window/size/viewport_height=768
+window/size/resizable=true
+window/size/always_on_top=false
 window/stretch/mode="canvas_items"
 
 [dotnet]

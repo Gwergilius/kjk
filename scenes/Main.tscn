@@ -194,14 +194,24 @@ horizontal_alignment = 1
 [node name="HSeparator5" type="HSeparator" parent="MainLayout/GameArea/RightPanel/ChoicesPanel/ChoicesContainer"]
 layout_mode = 2
 
-[node name="Choice1" type="Button" parent="MainLayout/GameArea/RightPanel/ChoicesPanel/ChoicesContainer"]
+[node name="Choice1" type="RichTextLabel" parent="MainLayout/GameArea/RightPanel/ChoicesPanel/ChoicesContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+mouse_filter = 1
 text = "[1] Choice 1"
 
-[node name="Choice2" type="Button" parent="MainLayout/GameArea/RightPanel/ChoicesPanel/ChoicesContainer"]
+[node name="Choice2" type="RichTextLabel" parent="MainLayout/GameArea/RightPanel/ChoicesPanel/ChoicesContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+mouse_filter = 1
 text = "[2] Choice 2"
 
 [node name="HSeparator6" type="HSeparator" parent="MainLayout"]

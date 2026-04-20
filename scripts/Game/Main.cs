@@ -190,31 +190,69 @@ public partial class Main : Control
 
     private void SetupChoices(List<Choice> choices)
     {
-        // Clear existing choice buttons
+        // Clear existing choice elements
         ClearChoices();
 
         // Add choice title
         var choicesTitle = new Label { Text = _localizationManager!.GetText("CHOICES_TITLE") };
         _choicesContainer!.AddChild(choicesTitle);
 
-        // Create buttons for each choice
+        // Create RichTextLabel for each choice with word wrap
         for (int i = 0; i < choices.Count; i++)
         {
             var choice = choices[i];
-            var choiceButton = new Button
+            
+            // Create clickable choice container
+            var choiceContainer = new Panel
             {
-                Text = $"{i + 1}. {_localizationManager.GetText(choice.TextKey)}",
-                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+                CustomMinimumSize = new Vector2(0, 40),
+                MouseFilter = Control.MouseFilterEnum.Pass
             };
             
+            var choiceLabel = new RichTextLabel
+            {
+                BbcodeEnabled = true,
+                FitContent = true,
+                ScrollActive = false,
+                MouseFilter = Control.MouseFilterEnum.Ignore,
+                Text = $"[color=white]{i + 1}. {_localizationManager.GetText(choice.TextKey)}[/color]"
+            };
+            
+            // Setup container layout - manual anchor and offset setting
+            choiceLabel.AnchorLeft = 0.0f;
+            choiceLabel.AnchorTop = 0.0f;
+            choiceLabel.AnchorRight = 1.0f;
+            choiceLabel.AnchorBottom = 1.0f;
+            choiceLabel.OffsetLeft = 10;
+            choiceLabel.OffsetTop = 5;
+            choiceLabel.OffsetRight = -10;
+            choiceLabel.OffsetBottom = -5;
+            
             // Store target section in metadata
-            choiceButton.SetMeta("target", choice.Target);
-            choiceButton.SetMeta("choice_number", i + 1);
+            choiceContainer.SetMeta("target", choice.Target);
+            choiceContainer.SetMeta("choice_number", i + 1);
             
-            // Connect signal
-            choiceButton.Pressed += () => OnChoicePressed(choiceButton);
+            // Connect input event for click detection
+            choiceContainer.GuiInput += (inputEvent) => OnChoiceInput(choiceContainer, inputEvent);
             
-            _choicesContainer!.AddChild(choiceButton);
+            // Add hover effect
+            var styleBox = new StyleBoxFlat
+            {
+                BgColor = new Color(0.2f, 0.2f, 0.3f, 0.8f),
+                BorderWidthLeft = 2,
+                BorderWidthRight = 2,
+                BorderWidthTop = 2,
+                BorderWidthBottom = 2,
+                BorderColor = new Color(0.4f, 0.4f, 0.6f, 1.0f),
+                CornerRadiusTopLeft = 4,
+                CornerRadiusTopRight = 4,
+                CornerRadiusBottomLeft = 4,
+                CornerRadiusBottomRight = 4
+            };
+            choiceContainer.AddThemeStyleboxOverride("panel", styleBox);
+            
+            choiceContainer.AddChild(choiceLabel);
+            _choicesContainer!.AddChild(choiceContainer);
         }
     }
 
@@ -226,13 +264,16 @@ public partial class Main : Control
         }
     }
 
-    private void OnChoicePressed(Button choiceButton)
+    private void OnChoiceInput(Panel choiceContainer, InputEvent inputEvent)
     {
-        var target = choiceButton.GetMeta("target").AsInt32();
-        var choiceNumber = choiceButton.GetMeta("choice_number").AsInt32();
-        
-        GD.Print(_localizationManager!.GetText("LOG_SELECTED_OPTION", choiceNumber, target));
-        DisplaySection(target);
+        if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
+        {
+            var target = choiceContainer.GetMeta("target").AsInt32();
+            var choiceNumber = choiceContainer.GetMeta("choice_number").AsInt32();
+            
+            GD.Print(_localizationManager!.GetText("LOG_SELECTED_OPTION", choiceNumber, target));
+            DisplaySection(target);
+        }
     }
 
     private void OnSectionImagePressed()
