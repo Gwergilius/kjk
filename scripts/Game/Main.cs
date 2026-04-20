@@ -2,22 +2,25 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using TalismanOfDeath.Data;
+using TalismanOfDeath.Game.Panels;
 
 namespace TalismanOfDeath.Game;
 
 /// <summary>
-/// Talisman of Death - Gateway-style adventure game interface
-/// Starting with section 1
+/// Talisman of Death - Modularized panel architecture
+/// Main coordinator for all game panels
 /// </summary>
 public partial class Main : Control
 {
-    // UI Node references (must match unique_name_in_owner from Main.tscn)
-    private Button? _sectionImagePlaceholder;
+    // Panel references (modularized scene instances)
+    private ImagePanel? _imagePanel;
+    private StoryPanel? _storyPanel;
+    private StatusPanel? _statusPanel;
+    private InventoryPanel? _inventoryPanel;
+    private ChoicesPanel? _choicesPanel;
+    
+    // UI elements in Main scene
     private Label? _sectionLabel;
-    private RichTextLabel? _storyText;
-    private VBoxContainer? _statusPanel;
-    private VBoxContainer? _inventoryPanel;
-    private VBoxContainer? _choicesContainer;
     private Button? _languageButton;
 
     private int _currentSection = 1;
@@ -62,24 +65,30 @@ public partial class Main : Control
             }
         }}
     };
+
     public override void _Ready()
     {
         // Create and add LocalizationManager
         _localizationManager = new LocalizationManager();
         AddChild(_localizationManager);
         
-        // Get node references (using unique names from Main.tscn)
-        _sectionImagePlaceholder = GetNode<Button>("%SectionImagePlaceholder");
+        // Get panel references (modularized scene instances)
+        _imagePanel = GetNode<ImagePanel>("%ImagePanel");
+        _storyPanel = GetNode<StoryPanel>("%StoryPanel");
+        _statusPanel = GetNode<StatusPanel>("%StatusPanel");
+        _inventoryPanel = GetNode<InventoryPanel>("%InventoryPanel");
+        _choicesPanel = GetNode<ChoicesPanel>("%ChoicesPanel");
+        
+        // Get UI element references
         _sectionLabel = GetNode<Label>("%SectionLabel");
-        _storyText = GetNode<RichTextLabel>("%StoryText");
-        _statusPanel = GetNode<VBoxContainer>("%StatusContainer");
-        _inventoryPanel = GetNode<VBoxContainer>("%InventoryContainer");
-        _choicesContainer = GetNode<VBoxContainer>("%ChoicesContainer");
         _languageButton = GetNode<Button>("%LanguageButton");
 
-        // Connect signals
+        // Connect panel signals
+        _imagePanel!.ImageClicked += OnImageClicked;
+        _choicesPanel!.ChoiceSelected += OnChoiceSelected;
+        
+        // Connect main UI signals
         _languageButton!.Pressed += OnLanguageButtonPressed;
-        _sectionImagePlaceholder!.Pressed += OnSectionImagePressed;
 
         // Add to localized nodes group for language change notifications
         AddToGroup("localized_nodes");
@@ -94,52 +103,29 @@ public partial class Main : Control
 
     private void SetupPlaceholderPanels()
     {
-        // Clear and setup Status Panel placeholder
-        foreach (Node child in _statusPanel!.GetChildren())
-        {
-            child.QueueFree();
-        }
-        
-        var statusTitle = new Label { Text = _localizationManager!.GetText("STATUS_TITLE") };
-        statusTitle.AddThemeStyleboxOverride("normal", new StyleBoxFlat());
-        _statusPanel.AddChild(statusTitle);
-        
-        var sectionInfo = new Label { Text = $"{_localizationManager.GetText("SECTION_LABEL")} {_currentSection}" };
-        _statusPanel.AddChild(sectionInfo);
-        
-        var skillLabel = new Label { Text = $"{_localizationManager.GetText("SKILL_LABEL")} 12" };
-        _statusPanel.AddChild(skillLabel);
-        
-        var staminaLabel = new Label { Text = $"{_localizationManager.GetText("STAMINA_LABEL")} 20" };
-        _statusPanel.AddChild(staminaLabel);
-        
-        var luckLabel = new Label { Text = $"{_localizationManager.GetText("LUCK_LABEL")} 10" };
-        _statusPanel.AddChild(luckLabel);
-        
-        var goldLabel = new Label { Text = $"{_localizationManager.GetText("GOLD_LABEL")} 25" };
-        _statusPanel.AddChild(goldLabel);
+        // Setup status panel with placeholder data
+        string[] statusLabels = {
+            _localizationManager!.GetText("SECTION_LABEL"),
+            _localizationManager.GetText("SKILL_LABEL"),
+            _localizationManager.GetText("STAMINA_LABEL"),
+            _localizationManager.GetText("LUCK_LABEL"),
+            _localizationManager.GetText("GOLD_LABEL")
+        };
+        _statusPanel!.SetupPlaceholderData(statusLabels, _currentSection);
 
-        // Clear and setup Inventory Panel placeholder
-        foreach (Node child in _inventoryPanel!.GetChildren())
-        {
-            child.QueueFree();
-        }
-        
-        var inventoryTitle = new Label { Text = _localizationManager.GetText("INVENTORY_TITLE") };
-        _inventoryPanel.AddChild(inventoryTitle);
-        
-        var itemsLabel = new Label { Text = $"{_localizationManager.GetText("ITEMS_LABEL")}\n• Sword\n• Potion\n• Provisions" };
-        _inventoryPanel.AddChild(itemsLabel);
+        // Setup inventory panel placeholder  
+        var itemsText = $"{_localizationManager.GetText("ITEMS_LABEL")}\n• Sword\n• Potion\n• Provisions";
+        _inventoryPanel!.SetPlaceholderItems(itemsText);
     }
 
     private void DisplaySection(int sectionId)
     {
         _currentSection = sectionId;
 
-        // Update section image placeholder
-        _sectionImagePlaceholder!.Text = _localizationManager!.GetText("SECTION_IMAGE");
+        // Update image panel
+        _imagePanel!.UpdateImage(_localizationManager!.GetText("SECTION_IMAGE"));
         
-        // Update section label
+        // Update section label in bottom status bar
         _sectionLabel!.Text = $"{_localizationManager.GetText("SECTION_LABEL")} {sectionId}";
 
         if (_sections.TryGetValue(sectionId, out var sectionData))
@@ -160,93 +146,32 @@ public partial class Main : Control
                 sectionText = _localizationManager.GetText(sectionData.TextKey);
             }
             
-            _storyText!.Text = sectionText;
+            // Update story panel
+            _storyPanel!.UpdateStoryText(sectionText);
 
-            // Setup choices
-            SetupChoices(sectionData.Choices);
+            // Setup choices panel
+            _choicesPanel!.SetupChoices(sectionData.Choices, (key) => _localizationManager.GetText(key));
             
-            // Update status panel section info
-            RefreshStatusPanel();
+            // Update status panel with current section
+            _statusPanel!.UpdateSection(sectionId, _localizationManager.GetText("SECTION_LABEL"));
         }
         else
         {
-            _storyText!.Text = $"[color=red]{_localizationManager.GetText("ERROR_SECTION_NOT_FOUND", sectionId)}[/color]";
-            ClearChoices();
+            var errorText = $"[color=red]{_localizationManager.GetText("ERROR_SECTION_NOT_FOUND", sectionId)}[/color]";
+            _storyPanel!.UpdateStoryText(errorText);
+            _choicesPanel!.ClearChoices();
         }
     }
 
-    private void RefreshStatusPanel()
+    private void OnChoiceSelected(int target, int choiceNumber)
     {
-        // Update the section number in status panel
-        if (_statusPanel!.GetChildCount() > 1)
-        {
-            var sectionInfo = _statusPanel.GetChild(1) as Label;
-            if (sectionInfo != null)
-            {
-                sectionInfo.Text = $"{_localizationManager!.GetText("SECTION_LABEL")} {_currentSection}";
-            }
-        }
-    }
-
-    private void SetupChoices(List<Choice> choices)
-    {
-        // Clear existing choice elements
-        ClearChoices();
-
-        // Add choice title
-        var choicesTitle = new Label { Text = _localizationManager!.GetText("CHOICES_TITLE") };
-        _choicesContainer!.AddChild(choicesTitle);
-
-        // Add separator
-        var separator = new HSeparator();
-        _choicesContainer.AddChild(separator);
-
-        // Create simple Button for each choice with proper text wrapping
-        for (int i = 0; i < choices.Count; i++)
-        {
-            var choice = choices[i];
-            
-            var choiceButton = new Button
-            {
-                Text = $"{i + 1}. {_localizationManager.GetText(choice.TextKey)}",
-                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-                SizeFlagsVertical = Control.SizeFlags.ShrinkCenter,
-                AutowrapMode = TextServer.AutowrapMode.WordSmart,
-                CustomMinimumSize = new Vector2(0, 40),
-                ClipContents = false
-            };
-            
-            // Store target section in metadata
-            choiceButton.SetMeta("target", choice.Target);
-            choiceButton.SetMeta("choice_number", i + 1);
-            
-            // Connect button press signal
-            choiceButton.Pressed += () => OnChoicePressed(choiceButton);
-            
-            _choicesContainer.AddChild(choiceButton);
-        }
-    }
-
-    private void ClearChoices()
-    {
-        foreach (Node child in _choicesContainer!.GetChildren())
-        {
-            child.QueueFree();
-        }
-    }
-
-    private void OnChoicePressed(Button choiceButton)
-    {
-        var target = choiceButton.GetMeta("target").AsInt32();
-        var choiceNumber = choiceButton.GetMeta("choice_number").AsInt32();
-        
         GD.Print(_localizationManager!.GetText("LOG_SELECTED_OPTION", choiceNumber, target));
         DisplaySection(target);
     }
 
-    private void OnSectionImagePressed()
+    private void OnImageClicked()
     {
-        GD.Print("Section image placeholder clicked");
+        GD.Print("Section image clicked from ImagePanel");
     }
 
     private void OnLanguageButtonPressed()
@@ -277,7 +202,7 @@ public partial class Main : Control
         // Update language button text
         UpdateLanguageButton();
         
-        // Refresh all UI elements  
+        // Refresh all panels  
         SetupPlaceholderPanels();
         DisplaySection(_currentSection);
     }

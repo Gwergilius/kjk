@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://dnj38oxl4tgbw"]
+[gd_scene load_steps=7 format=3 uid="uid://dnj38oxl4tgbw"]
 
 [ext_resource type="Script" path="res://scripts/Game/Main.cs" id="1_3lmcg"]
+[ext_resource type="PackedScene" uid="uid://b2xj8oxl9tgbw" path="res://scenes/panels/ImagePanel.tscn" id="2_image"]
+[ext_resource type="PackedScene" uid="uid://c3yj9pxl2tgbw" path="res://scenes/panels/StoryPanel.tscn" id="3_story"]
+[ext_resource type="PackedScene" uid="uid://d4zk1qxl3tgbw" path="res://scenes/panels/StatusPanel.tscn" id="4_status"]
+[ext_resource type="PackedScene" uid="uid://e5al2rxl4tgbw" path="res://scenes/panels/InventoryPanel.tscn" id="5_inventory"]
+[ext_resource type="PackedScene" uid="uid://f6bm3sxl5tgbw" path="res://scenes/panels/ChoicesPanel.tscn" id="6_choices"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -46,8 +51,60 @@ split_offset = 700
 [node name="LeftPanel" type="VBoxContainer" parent="MainLayout/GameArea"]
 layout_mode = 2
 
-[node name="ImageArea" type="Control" parent="MainLayout/GameArea/LeftPanel"]
+[node name="ImagePanel" parent="MainLayout/GameArea/LeftPanel" instance=ExtResource("2_image")]
+unique_name_in_owner = true
 layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="MainLayout/GameArea/LeftPanel"]
+layout_mode = 2
+
+[node name="StoryPanel" parent="MainLayout/GameArea/LeftPanel" instance=ExtResource("3_story")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RightPanel" type="VBoxContainer" parent="MainLayout/GameArea"]
+layout_mode = 2
+custom_minimum_size = Vector2(320, 0)
+
+[node name="StatusPanel" parent="MainLayout/GameArea/RightPanel" instance=ExtResource("4_status")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="MainLayout/GameArea/RightPanel"]
+layout_mode = 2
+
+[node name="InventoryPanel" parent="MainLayout/GameArea/RightPanel" instance=ExtResource("5_inventory")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VSeparator2" type="VSeparator" parent="MainLayout/GameArea/RightPanel"]
+layout_mode = 2
+
+[node name="ChoicesPanel" parent="MainLayout/GameArea/RightPanel" instance=ExtResource("6_choices")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator6" type="HSeparator" parent="MainLayout"]
+layout_mode = 2
+
+[node name="DebugStatusBar" type="HBoxContainer" parent="MainLayout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 30)
+
+[node name="SectionLabel" type="Label" parent="MainLayout/DebugStatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Section: 1"
+vertical_alignment = 1
+
+[node name="LanguageButton" type="Button" parent="MainLayout/DebugStatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+text = "Language: English"
 custom_minimum_size = Vector2(0, 300)
 
 [node name="SectionImagePlaceholder" type="Button" parent="MainLayout/GameArea/LeftPanel/ImageArea"]

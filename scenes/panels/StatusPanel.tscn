@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://d4zk1qxl3tgbw"]
+
+[ext_resource type="Script" path="res://scripts/Game/Panels/StatusPanel.cs" id="1_status"]
+
+[node name="StatusPanel" type="Panel"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_status")
+custom_minimum_size = Vector2(0, 150)
+
+[node name="StatusContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="StatusTitle" type="Label" parent="StatusContainer"]
+layout_mode = 2
+text = "STATUS"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="StatusContainer"]
+layout_mode = 2
+
+[node name="SectionLabel" type="Label" parent="StatusContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Section: 1"
+
+[node name="SkillLabel" type="Label" parent="StatusContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Skill: 12"
+
+[node name="StaminaLabel" type="Label" parent="StatusContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Stamina: 20"
+
+[node name="LuckLabel" type="Label" parent="StatusContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Luck: 10"
+
+[node name="GoldLabel" type="Label" parent="StatusContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Gold: 25"
