@@ -72,9 +72,9 @@ public partial class Main : Control
         _sectionImagePlaceholder = GetNode<Button>("%SectionImagePlaceholder");
         _sectionLabel = GetNode<Label>("%SectionLabel");
         _storyText = GetNode<RichTextLabel>("%StoryText");
-        _statusPanel = GetNode<VBoxContainer>("%StatusPanel");
-        _inventoryPanel = GetNode<VBoxContainer>("%InventoryPanel");
-        _choicesContainer = GetNode<VBoxContainer>("%ChoicesPanel");
+        _statusPanel = GetNode<VBoxContainer>("%StatusContainer");
+        _inventoryPanel = GetNode<VBoxContainer>("%InventoryContainer");
+        _choicesContainer = GetNode<VBoxContainer>("%ChoicesContainer");
         _languageButton = GetNode<Button>("%LanguageButton");
 
         // Connect signals
