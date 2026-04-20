@@ -98,6 +98,61 @@ public partial class LocalizationManager : Node
         {
             ["en"] = "Selected option {0} -> Jump to section {1}",
             ["hu"] = "Választottad a {0}. opciót -> Ugrás a {1}. bekezdésre"
+        },
+        ["STATUS_TITLE"] = new Dictionary<string, string>
+        {
+            ["en"] = "STATUS",
+            ["hu"] = "STÁTUSZ"
+        },
+        ["INVENTORY_TITLE"] = new Dictionary<string, string>
+        {
+            ["en"] = "INVENTORY",
+            ["hu"] = "FELSZERELÉS"
+        },
+        ["CHOICES_TITLE"] = new Dictionary<string, string>
+        {
+            ["en"] = "CHOICES",
+            ["hu"] = "VÁLASZTÁSOK"
+        },
+        ["SECTION_LABEL"] = new Dictionary<string, string>
+        {
+            ["en"] = "Section:",
+            ["hu"] = "Helység:"
+        },
+        ["SKILL_LABEL"] = new Dictionary<string, string>
+        {
+            ["en"] = "Skill:",
+            ["hu"] = "Ügyesség:"
+        },
+        ["STAMINA_LABEL"] = new Dictionary<string, string>
+        {
+            ["en"] = "Stamina:",
+            ["hu"] = "Életerő:"
+        },
+        ["LUCK_LABEL"] = new Dictionary<string, string>
+        {
+            ["en"] = "Luck:",
+            ["hu"] = "Szerencse:"
+        },
+        ["GOLD_LABEL"] = new Dictionary<string, string>
+        {
+            ["en"] = "Gold:",
+            ["hu"] = "Arany:"
+        },
+        ["ITEMS_LABEL"] = new Dictionary<string, string>
+        {
+            ["en"] = "Items:",
+            ["hu"] = "Tárgyak:"
+        },
+        ["SECTION_IMAGE"] = new Dictionary<string, string>
+        {
+            ["en"] = "[Section Image]",
+            ["hu"] = "[Helység Képe]"
+        },
+        ["LOADING_STORY"] = new Dictionary<string, string>
+        {
+            ["en"] = "[center]Loading story...[/center]",
+            ["hu"] = "[center]Történet betöltése...[/center]"
         }
     };
     

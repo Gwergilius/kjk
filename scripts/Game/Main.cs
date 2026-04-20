@@ -6,17 +6,19 @@ using TalismanOfDeath.Data;
 namespace TalismanOfDeath.Game;
 
 /// <summary>
-/// Talisman of Death - Simple prototype with localization
+/// Talisman of Death - Gateway-style adventure game interface
 /// Starting with section 1
 /// </summary>
 public partial class Main : Control
 {
-    [Export] private RichTextLabel? _storyText;
-    [Export] private VBoxContainer? _choicesContainer;
-    [Export] private Button? _choice1Button;
-    [Export] private Button? _choice2Button;
-    [Export] private Button? _languageButton;
-    [Export] private Label? _titleLabel;
+    // UI Node references (must match unique_name_in_owner from Main.tscn)
+    private Button? _sectionImagePlaceholder;
+    private Label? _sectionLabel;
+    private RichTextLabel? _storyText;
+    private VBoxContainer? _statusPanel;
+    private VBoxContainer? _inventoryPanel;
+    private VBoxContainer? _choicesContainer;
+    private Button? _languageButton;
 
     private int _currentSection = 1;
     private LocalizationManager? _localizationManager;
@@ -38,8 +40,8 @@ public partial class Main : Control
             TextKey = "SECTION_17_TEXT",
             Choices = new List<Choice>
             {
-                new() { TextKey = "SECTION_17_CHOICE_1", Target = 41 },
-                new() { TextKey = "SECTION_17_CHOICE_2", Target = 21 }
+                new() { TextKey = "SECTION_17_CHOICE_1", Target = 42 },
+                new() { TextKey = "SECTION_17_CHOICE_2", Target = 1 }
             }
         }},
         {30, new SectionData
@@ -47,76 +49,98 @@ public partial class Main : Control
             TextKey = "SECTION_30_TEXT",
             Choices = new List<Choice>
             {
-                new() { TextKey = "SECTION_30_CHOICE_1", Target = 13 }
+                new() { TextKey = "SECTION_30_CHOICE_1", Target = 1 },
+                new() { TextKey = "SECTION_30_CHOICE_2", Target = 17 }
             }
         }},
-        {41, new SectionData
+        {42, new SectionData
         {
-            TextKey = "SECTION_NOT_IMPLEMENTED",
-            AdditionalTextKey = "SECTION_NOT_IMPLEMENTED_DESC",
-            AdditionalTextArgs = new object[] { 41 },
+            TextKey = "SECTION_42_TEXT",
             Choices = new List<Choice>
             {
-                new() { TextKey = "BACK_TO_BEGINNING", Target = 1 }
-            }
-        }},
-        {21, new SectionData
-        {
-            TextKey = "SECTION_NOT_IMPLEMENTED",
-            AdditionalTextKey = "SECTION_NOT_IMPLEMENTED_DESC",
-            AdditionalTextArgs = new object[] { 21 },
-            Choices = new List<Choice>
-            {
-                new() { TextKey = "BACK_TO_BEGINNING", Target = 1 }
-            }
-        }},
-        {13, new SectionData
-        {
-            TextKey = "SECTION_NOT_IMPLEMENTED",
-            AdditionalTextKey = "SECTION_NOT_IMPLEMENTED_DESC",
-            AdditionalTextArgs = new object[] { 13 },
-            Choices = new List<Choice>
-            {
-                new() { TextKey = "BACK_TO_BEGINNING", Target = 1 }
+                new() { TextKey = "SECTION_42_CHOICE_1", Target = 1 }
             }
         }}
     };
-
     public override void _Ready()
     {
         // Create and add LocalizationManager
         _localizationManager = new LocalizationManager();
         AddChild(_localizationManager);
         
-        // Get node references
+        // Get node references (using unique names from Main.tscn)
+        _sectionImagePlaceholder = GetNode<Button>("%SectionImagePlaceholder");
+        _sectionLabel = GetNode<Label>("%SectionLabel");
         _storyText = GetNode<RichTextLabel>("%StoryText");
-        _choicesContainer = GetNode<VBoxContainer>("%ChoicesContainer");
-        _choice1Button = GetNode<Button>("%Choice1");
-        _choice2Button = GetNode<Button>("%Choice2");
+        _statusPanel = GetNode<VBoxContainer>("%StatusPanel");
+        _inventoryPanel = GetNode<VBoxContainer>("%InventoryPanel");
+        _choicesContainer = GetNode<VBoxContainer>("%ChoicesPanel");
         _languageButton = GetNode<Button>("%LanguageButton");
-        _titleLabel = GetNode<Label>("GameContainer/VBox/Title");
 
         // Connect signals
-        _choice1Button.Pressed += OnChoice1Pressed;
-        _choice2Button.Pressed += OnChoice2Pressed;
-        _languageButton.Pressed += OnLanguageButtonPressed;
+        _languageButton!.Pressed += OnLanguageButtonPressed;
+        _sectionImagePlaceholder!.Pressed += OnSectionImagePressed;
 
         // Add to localized nodes group for language change notifications
         AddToGroup("localized_nodes");
         
-        // Set initial UI text
-        _titleLabel!.Text = _localizationManager.GetText("GAME_TITLE");
-        var currentLang = _localizationManager.GetCurrentLanguage();
-        var displayName = _localizationManager.GetLanguageName(currentLang);
-        _languageButton!.Text = $"{_localizationManager.GetText("LANGUAGE")}: {displayName}";
+        // Setup initial UI state
+        UpdateLanguageButton();
+        SetupPlaceholderPanels();
         
         GD.Print(_localizationManager.GetText("LOG_ADVENTURE_BEGINS"));
         DisplaySection(1);
     }
 
+    private void SetupPlaceholderPanels()
+    {
+        // Clear and setup Status Panel placeholder
+        foreach (Node child in _statusPanel!.GetChildren())
+        {
+            child.QueueFree();
+        }
+        
+        var statusTitle = new Label { Text = _localizationManager!.GetText("STATUS_TITLE") };
+        statusTitle.AddThemeStyleboxOverride("normal", new StyleBoxFlat());
+        _statusPanel.AddChild(statusTitle);
+        
+        var sectionInfo = new Label { Text = $"{_localizationManager.GetText("SECTION_LABEL")} {_currentSection}" };
+        _statusPanel.AddChild(sectionInfo);
+        
+        var skillLabel = new Label { Text = $"{_localizationManager.GetText("SKILL_LABEL")} 12" };
+        _statusPanel.AddChild(skillLabel);
+        
+        var staminaLabel = new Label { Text = $"{_localizationManager.GetText("STAMINA_LABEL")} 20" };
+        _statusPanel.AddChild(staminaLabel);
+        
+        var luckLabel = new Label { Text = $"{_localizationManager.GetText("LUCK_LABEL")} 10" };
+        _statusPanel.AddChild(luckLabel);
+        
+        var goldLabel = new Label { Text = $"{_localizationManager.GetText("GOLD_LABEL")} 25" };
+        _statusPanel.AddChild(goldLabel);
+
+        // Clear and setup Inventory Panel placeholder
+        foreach (Node child in _inventoryPanel!.GetChildren())
+        {
+            child.QueueFree();
+        }
+        
+        var inventoryTitle = new Label { Text = _localizationManager.GetText("INVENTORY_TITLE") };
+        _inventoryPanel.AddChild(inventoryTitle);
+        
+        var itemsLabel = new Label { Text = $"{_localizationManager.GetText("ITEMS_LABEL")}\n• Sword\n• Potion\n• Provisions" };
+        _inventoryPanel.AddChild(itemsLabel);
+    }
+
     private void DisplaySection(int sectionId)
     {
         _currentSection = sectionId;
+
+        // Update section image placeholder
+        _sectionImagePlaceholder!.Text = _localizationManager!.GetText("SECTION_IMAGE");
+        
+        // Update section label
+        _sectionLabel!.Text = $"{_localizationManager.GetText("SECTION_LABEL")} {sectionId}";
 
         if (_sections.TryGetValue(sectionId, out var sectionData))
         {
@@ -125,7 +149,7 @@ public partial class Main : Control
             
             if (sectionData.TextKey == "SECTION_NOT_IMPLEMENTED")
             {
-                sectionText += $"[color=red]{_localizationManager!.GetText(sectionData.TextKey)}[/color]\n\n";
+                sectionText += $"[color=red]{_localizationManager.GetText(sectionData.TextKey)}[/color]\n\n";
                 if (!string.IsNullOrEmpty(sectionData.AdditionalTextKey))
                 {
                     sectionText += _localizationManager.GetText(sectionData.AdditionalTextKey, sectionData.AdditionalTextArgs ?? new object[0]);
@@ -133,61 +157,87 @@ public partial class Main : Control
             }
             else
             {
-                sectionText += _localizationManager!.GetText(sectionData.TextKey);
+                sectionText += _localizationManager.GetText(sectionData.TextKey);
             }
             
             _storyText!.Text = sectionText;
 
             // Setup choices
             SetupChoices(sectionData.Choices);
+            
+            // Update status panel section info
+            RefreshStatusPanel();
         }
         else
         {
-            _storyText!.Text = $"[color=red]{_localizationManager!.GetText("ERROR_SECTION_NOT_FOUND", sectionId)}[/color]";
-            HideChoices();
+            _storyText!.Text = $"[color=red]{_localizationManager.GetText("ERROR_SECTION_NOT_FOUND", sectionId)}[/color]";
+            ClearChoices();
+        }
+    }
+
+    private void RefreshStatusPanel()
+    {
+        // Update the section number in status panel
+        if (_statusPanel!.GetChildCount() > 1)
+        {
+            var sectionInfo = _statusPanel.GetChild(1) as Label;
+            if (sectionInfo != null)
+            {
+                sectionInfo.Text = $"{_localizationManager!.GetText("SECTION_LABEL")} {_currentSection}";
+            }
         }
     }
 
     private void SetupChoices(List<Choice> choices)
     {
-        // Hide both buttons first
-        _choice1Button!.Visible = false;
-        _choice2Button!.Visible = false;
+        // Clear existing choice buttons
+        ClearChoices();
 
-        // Setup choices based on count
-        if (choices.Count >= 1)
-        {
-            _choice1Button.Text = _localizationManager!.GetText(choices[0].TextKey);
-            _choice1Button.Visible = true;
-            _choice1Button.SetMeta("target", choices[0].Target);
-        }
+        // Add choice title
+        var choicesTitle = new Label { Text = _localizationManager!.GetText("CHOICES_TITLE") };
+        _choicesContainer!.AddChild(choicesTitle);
 
-        if (choices.Count >= 2)
+        // Create buttons for each choice
+        for (int i = 0; i < choices.Count; i++)
         {
-            _choice2Button.Text = _localizationManager!.GetText(choices[1].TextKey);
-            _choice2Button.Visible = true;
-            _choice2Button.SetMeta("target", choices[1].Target);
+            var choice = choices[i];
+            var choiceButton = new Button
+            {
+                Text = $"{i + 1}. {_localizationManager.GetText(choice.TextKey)}",
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
+            };
+            
+            // Store target section in metadata
+            choiceButton.SetMeta("target", choice.Target);
+            choiceButton.SetMeta("choice_number", i + 1);
+            
+            // Connect signal
+            choiceButton.Pressed += () => OnChoicePressed(choiceButton);
+            
+            _choicesContainer!.AddChild(choiceButton);
         }
     }
 
-    private void HideChoices()
+    private void ClearChoices()
     {
-        _choice1Button!.Visible = false;
-        _choice2Button!.Visible = false;
+        foreach (Node child in _choicesContainer!.GetChildren())
+        {
+            child.QueueFree();
+        }
     }
 
-    private void OnChoice1Pressed()
+    private void OnChoicePressed(Button choiceButton)
     {
-        var target = _choice1Button!.GetMeta("target").AsInt32();
-        GD.Print(_localizationManager!.GetText("LOG_SELECTED_OPTION", 1, target));
+        var target = choiceButton.GetMeta("target").AsInt32();
+        var choiceNumber = choiceButton.GetMeta("choice_number").AsInt32();
+        
+        GD.Print(_localizationManager!.GetText("LOG_SELECTED_OPTION", choiceNumber, target));
         DisplaySection(target);
     }
 
-    private void OnChoice2Pressed()
+    private void OnSectionImagePressed()
     {
-        var target = _choice2Button!.GetMeta("target").AsInt32();
-        GD.Print(_localizationManager!.GetText("LOG_SELECTED_OPTION", 2, target));
-        DisplaySection(target);
+        GD.Print("Section image placeholder clicked");
     }
 
     private void OnLanguageButtonPressed()
@@ -203,20 +253,23 @@ public partial class Main : Control
         _localizationManager.SetLanguage(nextLanguage);
     }
 
+    private void UpdateLanguageButton()
+    {
+        var currentLang = _localizationManager!.GetCurrentLanguage();
+        var displayName = _localizationManager.GetLanguageName(currentLang);
+        _languageButton!.Text = $"{_localizationManager.GetText("LANGUAGE")}: {displayName}";
+    }
+
     // Called when language changes
     public void _on_language_changed()
     {
         if (_localizationManager == null) return;
         
-        // Update title
-        _titleLabel!.Text = _localizationManager.GetText("GAME_TITLE");
-        
         // Update language button text
-        var currentLang = _localizationManager.GetCurrentLanguage();
-        var displayName = _localizationManager.GetLanguageName(currentLang);
-        _languageButton!.Text = $"{_localizationManager.GetText("LANGUAGE")}: {displayName}";
+        UpdateLanguageButton();
         
-        // Refresh current section to update all text
+        // Refresh all UI elements  
+        SetupPlaceholderPanels();
         DisplaySection(_currentSection);
     }
 
