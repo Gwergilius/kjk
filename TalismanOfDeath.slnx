@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="TalismanOfDeath.csproj" Type="C#" />
+  <Project Path="Common/Gwergilius.common.csproj" DisplayName="Gwergilius.Common" Id="b4f740e8-02bd-4f81-a74b-5ab39160006e" />
+  <Project Path="TalismanOfDeath.csproj" />
+  <Project Path="data/TalismanOfDeath.Content.csproj" />
 </Solution>

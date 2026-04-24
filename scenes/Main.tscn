@@ -1,18 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://dnj38oxl4tgbw"]
+[gd_scene format=3 uid="uid://dnj38oxl4tgbw"]
 
-[ext_resource type="Script" path="res://scripts/Game/Main.cs" id="1_3lmcg"]
-[ext_resource type="PackedScene" uid="uid://b2xj8oxl9tgbw" path="res://scenes/panels/ImagePanel.tscn" id="2_image"]
-[ext_resource type="PackedScene" uid="uid://c3yj9pxl2tgbw" path="res://scenes/panels/StoryPanel.tscn" id="3_story"]
-[ext_resource type="PackedScene" uid="uid://d4zk1qxl3tgbw" path="res://scenes/panels/StatusPanel.tscn" id="4_status"]
-[ext_resource type="PackedScene" uid="uid://e5al2rxl4tgbw" path="res://scenes/panels/InventoryPanel.tscn" id="5_inventory"]
-[ext_resource type="PackedScene" uid="uid://f6bm3sxl5tgbw" path="res://scenes/panels/ChoicesPanel.tscn" id="6_choices"]
-[ext_resource type="PackedScene" uid="uid://cj1mk4xl6tgbw" path="res://scenes/panels/DiceRollDialog.tscn" id="7_dice"]
+[ext_resource type="Script" uid="uid://hco2ivrxtxm2" path="res://scripts/Game/Main.cs" id="1_3lmcg"]
+[ext_resource type="PackedScene" uid="uid://cj1mk4xl6tgbw" path="res://scenes/panels/DiceRollDialog.tscn" id="2_dice"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_3lmcg")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -20,6 +17,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.8, 0.6, 0.2, 1)
 
 [node name="MainLayout" type="VBoxContainer" parent="."]
@@ -31,60 +30,24 @@ offset_left = 10.0
 offset_top = 10.0
 offset_right = -10.0
 offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="TitleBar" type="HBoxContainer" parent="MainLayout"]
 layout_mode = 2
 
 [node name="Title" type="Label" parent="MainLayout/TitleBar"]
+auto_translate_mode = 1
+modulate = Color(0.1, 0.05, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "TALISMAN OF DEATH"
+text = "GAME_TITLE"
 horizontal_alignment = 1
-modulate = Color(0.1, 0.05, 0.0, 1)
 
 [node name="HSeparator" type="HSeparator" parent="MainLayout"]
 layout_mode = 2
 
-[node name="GameArea" type="HSplitContainer" parent="MainLayout"]
-layout_mode = 2
-size_flags_vertical = 3
-split_offset = 700
-
-[node name="LeftPanel" type="VBoxContainer" parent="MainLayout/GameArea"]
-layout_mode = 2
-
-[node name="ImagePanel" parent="MainLayout/GameArea/LeftPanel" instance=ExtResource("2_image")]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="HSeparator2" type="HSeparator" parent="MainLayout/GameArea/LeftPanel"]
-layout_mode = 2
-
-[node name="StoryPanel" parent="MainLayout/GameArea/LeftPanel" instance=ExtResource("3_story")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="RightPanel" type="VBoxContainer" parent="MainLayout/GameArea"]
-layout_mode = 2
-custom_minimum_size = Vector2(320, 0)
-
-[node name="StatusPanel" parent="MainLayout/GameArea/RightPanel" instance=ExtResource("4_status")]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="VSeparator" type="VSeparator" parent="MainLayout/GameArea/RightPanel"]
-layout_mode = 2
-
-[node name="InventoryPanel" parent="MainLayout/GameArea/RightPanel" instance=ExtResource("5_inventory")]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="VSeparator2" type="VSeparator" parent="MainLayout/GameArea/RightPanel"]
-layout_mode = 2
-
-[node name="ChoicesPanel" parent="MainLayout/GameArea/RightPanel" instance=ExtResource("6_choices")]
-unique_name_in_owner = true
+[node name="ContentArea" type="Control" parent="MainLayout"]
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -92,34 +55,40 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [node name="DebugStatusBar" type="HBoxContainer" parent="MainLayout"]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
 
 [node name="SectionLabel" type="Label" parent="MainLayout/DebugStatusBar"]
+modulate = Color(0.1, 0.05, 0, 1)
+layout_mode = 2
+text = "Section:"
+vertical_alignment = 1
+
+[node name="SectionInput" type="LineEdit" parent="MainLayout/DebugStatusBar"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Section: 1"
-vertical_alignment = 1
-modulate = Color(0.1, 0.05, 0.0, 1)
+placeholder_text = "id"
 
-[node name="LanguageButton" type="Button" parent="MainLayout/DebugStatusBar"]
+[node name="LanguageButton" type="OptionButton" parent="MainLayout/DebugStatusBar"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-custom_minimum_size = Vector2(150, 0)
-text = "Language: English"
 
 [node name="SaveButton" type="Button" parent="MainLayout/DebugStatusBar"]
 unique_name_in_owner = true
-layout_mode = 2
+auto_translate_mode = 1
 custom_minimum_size = Vector2(60, 0)
-text = "Save"
+layout_mode = 2
+text = "SAVE"
 
 [node name="LoadButton" type="Button" parent="MainLayout/DebugStatusBar"]
 unique_name_in_owner = true
-layout_mode = 2
+auto_translate_mode = 1
 custom_minimum_size = Vector2(60, 0)
-text = "Load"
+layout_mode = 2
+text = "LOAD"
 
-[node name="DiceRollDialog" parent="." instance=ExtResource("7_dice")]
+[node name="DiceRollDialog" parent="." instance=ExtResource("2_dice")]
 unique_name_in_owner = true

@@ -1,0 +1,70 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en\n"
+
+msgid "GAME_TITLE"
+msgstr "TALISMAN OF DEATH"
+
+msgid "STATUS_TITLE"
+msgstr "STATUS"
+
+msgid "INVENTORY_TITLE"
+msgstr "INVENTORY"
+
+msgid "CHOICES_TITLE"
+msgstr "CHOICES"
+
+msgid "SECTION_LABEL"
+msgstr "Section:"
+
+msgid "SKILL_LABEL"
+msgstr "Skill:"
+
+msgid "STAMINA_LABEL"
+msgstr "Stamina:"
+
+msgid "LUCK_LABEL"
+msgstr "Luck:"
+
+msgid "GOLD_LABEL"
+msgstr "Gold:"
+
+msgid "MAX_LABEL"
+msgstr "Max:"
+
+msgid "INVENTORY_EMPTY"
+msgstr "Empty"
+
+msgid "SECTION_IMAGE_PLACEHOLDER"
+msgstr "[Section Image]"
+
+msgid "LOADING_STORY"
+msgstr "[center]Loading story...[/center]"
+
+msgid "SECTION_NOT_IMPLEMENTED"
+msgstr "This section has not been transcribed yet."
+
+msgid "ERROR_SECTION_NOT_FOUND"
+msgstr "ERROR: Section {0} not found!"
+
+msgid "BACK_TO_BEGINNING"
+msgstr "Back to beginning"
+
+msgid "ROLL_NEW_STATS"
+msgstr "Roll New Stats"
+
+msgid "TEST_YOUR_LUCK"
+msgstr "Test Your Luck"
+
+msgid "EAT_PROVISIONS"
+msgstr "Eat Provisions"
+
+msgid "LANGUAGE"
+msgstr "Language"
+
+msgid "SAVE"
+msgstr "Save"
+
+msgid "LOAD"
+msgstr "Load"

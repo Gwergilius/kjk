@@ -5,15 +5,18 @@
     <RootNamespace>TalismanOfDeath</RootNamespace>
     <AssemblyName>TalismanOfDeath</AssemblyName>
     <Nullable>enable</Nullable>
+    <LangVersion>14.0</LangVersion>
+    <DefaultItemExcludes>$(DefaultItemExcludes);Common/**;data/**</DefaultItemExcludes>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="8.0.0" />
-  </ItemGroup>
-  
+
   <ItemGroup>
     <Folder Include="scripts\Game\" />
     <Folder Include="scripts\UI\" />
     <Folder Include="scripts\Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="Common\Gwergilius.Common.csproj" />
+    <ProjectReference Include="data\TalismanOfDeath.Content.csproj" />
   </ItemGroup>
 </Project>

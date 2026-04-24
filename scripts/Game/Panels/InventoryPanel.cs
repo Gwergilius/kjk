@@ -1,130 +1,70 @@
 using Godot;
 using System.Collections.Generic;
-using System.Linq;
 using TalismanOfDeath.Data;
 
 namespace TalismanOfDeath.Game.Panels;
 
-/// <summary>
-/// Handles inventory item display and management
-/// </summary>
-public partial class InventoryPanel : Panel
+public partial class InventoryPanel : PanelContainer
 {
     private RichTextLabel? _itemsList;
     private CharacterSheet? _characterSheet;
-    
+
     public override void _Ready()
     {
         _itemsList = GetNode<RichTextLabel>("%ItemsList");
     }
-    
-    /// <summary>
-    /// Set the character sheet reference and connect to its signals
-    /// </summary>
+
+    public override void _Notification(int what)
+    {
+        if (what == NotificationTranslationChanged)
+            RefreshInventory();
+    }
+
     public void SetCharacterSheet(CharacterSheet characterSheet)
     {
-        // Disconnect from previous character sheet
         if (_characterSheet != null)
-        {
-            _characterSheet.InventoryChanged -= OnInventoryChanged;
-        }
-        
+            _characterSheet.InventoryChanged -= RefreshInventory;
+
         _characterSheet = characterSheet;
-        
-        if (_characterSheet != null)
-        {
-            // Connect to character sheet signals
-            _characterSheet.InventoryChanged += OnInventoryChanged;
-            
-            // Update display
-            OnInventoryChanged();
-        }
+        _characterSheet.InventoryChanged += RefreshInventory;
+        RefreshInventory();
     }
-    
-    private void OnInventoryChanged()
+
+    private void RefreshInventory()
     {
-        if (_characterSheet == null || _itemsList == null) return;
-        
-        var inventoryText = "[b]INVENTORY[/b]\n";
-        
-        if (_characterSheet.Inventory.Count == 0)
+        if (_itemsList == null) return;
+
+        if (_characterSheet == null || _characterSheet.Inventory.Count == 0)
         {
-            inventoryText += "[color=gray]Empty[/color]";
+            _itemsList.Text = $"[color=gray]{Tr("INVENTORY_EMPTY")}[/color]";
+            return;
         }
-        else
+
+        var grouped = new Dictionary<string, int>();
+        foreach (var item in _characterSheet.Inventory)
         {
-            // Group similar items
-            var groupedItems = new Dictionary<string, int>();
-            foreach (var item in _characterSheet.Inventory)
+            var parts = item.Split(' ');
+            if (item.Contains("Provisions") && parts.Length >= 2 && int.TryParse(parts[0], out int count))
             {
-                // Handle provision count parsing
-                if (item.Contains("Provisions"))
-                {
-                    var parts = item.Split(' ');
-                    if (parts.Length >= 2 && int.TryParse(parts[0], out int count))
-                    {
-                        if (groupedItems.ContainsKey("Provisions"))
-                            groupedItems["Provisions"] += count;
-                        else
-                            groupedItems["Provisions"] = count;
-                    }
-                    else
-                    {
-                        groupedItems[item] = groupedItems.ContainsKey(item) ? groupedItems[item] + 1 : 1;
-                    }
-                }
-                else
-                {
-                    groupedItems[item] = groupedItems.ContainsKey(item) ? groupedItems[item] + 1 : 1;
-                }
+                grouped["Provisions"] = grouped.GetValueOrDefault("Provisions") + count;
             }
-            
-            foreach (var kvp in groupedItems)
+            else
             {
-                if (kvp.Key == "Provisions")
-                {
-                    inventoryText += $"• {kvp.Value} {kvp.Key}\n";
-                }
-                else if (kvp.Value > 1)
-                {
-                    inventoryText += $"• {kvp.Key} x{kvp.Value}\n";
-                }
-                else
-                {
-                    inventoryText += $"• {kvp.Key}\n";
-                }
+                grouped[item] = grouped.GetValueOrDefault(item) + 1;
             }
         }
-        
-        _itemsList.Text = inventoryText;
-    }
-    
-    // Legacy methods for backwards compatibility
-    public void AddItem(string itemName)
-    {
-        _characterSheet?.AddItem(itemName);
-    }
-    
-    public void RemoveItem(string itemName)
-    {
-        _characterSheet?.RemoveItem(itemName);
-    }
-    
-    public void SetItems(List<string> items)
-    {
-        if (_characterSheet == null) return;
-        
-        _characterSheet.Inventory.Clear();
-        foreach (var item in items)
+
+        var sb = new System.Text.StringBuilder();
+        foreach (var (name, qty) in grouped)
         {
-            _characterSheet.AddItem(item);
+            if (name == "Provisions")
+                sb.AppendLine($"• {qty} {name}");
+            else if (qty > 1)
+                sb.AppendLine($"• {name} x{qty}");
+            else
+                sb.AppendLine($"• {name}");
         }
-    }
-    
-    public void SetPlaceholderItems(string itemsText)
-    {
-        // This is now handled by the character sheet system
-        // Update display automatically when character sheet is connected
-        OnInventoryChanged();
+
+        _itemsList.Text = sb.ToString().TrimEnd();
     }
 }

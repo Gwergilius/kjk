@@ -1,0 +1,70 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: hu\n"
+
+msgid "GAME_TITLE"
+msgstr "A HALÁLTALIZMÁN"
+
+msgid "STATUS_TITLE"
+msgstr "STÁTUSZ"
+
+msgid "INVENTORY_TITLE"
+msgstr "FELSZERELÉS"
+
+msgid "CHOICES_TITLE"
+msgstr "VÁLASZTÁSOK"
+
+msgid "SECTION_LABEL"
+msgstr "Helység:"
+
+msgid "SKILL_LABEL"
+msgstr "Ügyesség:"
+
+msgid "STAMINA_LABEL"
+msgstr "Életerő:"
+
+msgid "LUCK_LABEL"
+msgstr "Szerencse:"
+
+msgid "GOLD_LABEL"
+msgstr "Arany:"
+
+msgid "MAX_LABEL"
+msgstr "Max:"
+
+msgid "INVENTORY_EMPTY"
+msgstr "Üres"
+
+msgid "SECTION_IMAGE_PLACEHOLDER"
+msgstr "[Helység Képe]"
+
+msgid "LOADING_STORY"
+msgstr "[center]Történet betöltése...[/center]"
+
+msgid "SECTION_NOT_IMPLEMENTED"
+msgstr "Ez a bekezdés még nincs átiratva."
+
+msgid "ERROR_SECTION_NOT_FOUND"
+msgstr "HIBA: A(z) {0}. bekezdés nem található!"
+
+msgid "BACK_TO_BEGINNING"
+msgstr "Vissza az elejére"
+
+msgid "ROLL_NEW_STATS"
+msgstr "Új statisztikák dobása"
+
+msgid "TEST_YOUR_LUCK"
+msgstr "Szerencse próba"
+
+msgid "EAT_PROVISIONS"
+msgstr "Élelmet fogyaszt"
+
+msgid "LANGUAGE"
+msgstr "Nyelv"
+
+msgid "SAVE"
+msgstr "Mentés"
+
+msgid "LOAD"
+msgstr "Betöltés"

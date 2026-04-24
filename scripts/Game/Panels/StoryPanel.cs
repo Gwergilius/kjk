@@ -58,4 +58,6 @@ public partial class StoryPanel : Control
             _storyText.Text = loadingText;
         }
     }
+
+    public int GetContentHeight() => _storyText?.GetContentHeight() ?? 0;
 }

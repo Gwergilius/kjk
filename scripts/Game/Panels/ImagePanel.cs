@@ -1,35 +1,25 @@
 using Godot;
-using System;
 
 namespace TalismanOfDeath.Game.Panels;
 
-/// <summary>
-/// Handles section image display and click events
-/// </summary>
 public partial class ImagePanel : Control
 {
-    private Button? _sectionImagePlaceholder;
-    
-    [Signal]
-    public delegate void ImageClickedEventHandler();
-    
+    private TextureRect? _sectionImage;
+    private Button? _placeholder;
+
+    [Signal] public delegate void ImageClickedEventHandler();
+
     public override void _Ready()
     {
-        _sectionImagePlaceholder = GetNode<Button>("%SectionImagePlaceholder");
-        _sectionImagePlaceholder!.Pressed += OnImagePressed;
+        _sectionImage = GetNode<TextureRect>("%SectionImage");
+        _placeholder = GetNode<Button>("%SectionImagePlaceholder");
+        _placeholder.Pressed += () => EmitSignal(SignalName.ImageClicked);
     }
-    
-    public void UpdateImage(string imageText)
+
+    public void ShowImage(Texture2D? texture)
     {
-        if (_sectionImagePlaceholder != null)
-        {
-            _sectionImagePlaceholder.Text = imageText;
-        }
-    }
-    
-    private void OnImagePressed()
-    {
-        EmitSignal(SignalName.ImageClicked);
-        GD.Print("Section image placeholder clicked");
+        _sectionImage!.Texture = texture;
+        _sectionImage.Visible = texture != null;
+        _placeholder!.Visible = texture == null;
     }
 }

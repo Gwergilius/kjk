@@ -2,78 +2,73 @@
 
 [ext_resource type="Script" path="res://scripts/Game/Panels/StatusPanel.cs" id="1_status"]
 
-[node name="StatusPanel" type="Panel"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-script = ExtResource("1_status")
-custom_minimum_size = Vector2(0, 150)
-
-[node name="StatusContainer" type="VBoxContainer" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = -10.0
-offset_bottom = -10.0
-
-[node name="StatusTitle" type="Label" parent="StatusContainer"]
+[node name="StatusPanel" type="PanelContainer"]
 layout_mode = 2
-text = "STATUS"
+script = ExtResource("1_status")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="StatusContainer" type="VBoxContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StatusTitle" type="Label" parent="MarginContainer/StatusContainer"]
+layout_mode = 2
+auto_translate_mode = 1
+text = "STATUS_TITLE"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="StatusContainer"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/StatusContainer"]
 layout_mode = 2
 
-[node name="SectionLabel" type="Label" parent="StatusContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Section: 1"
-
-[node name="SkillLabel" type="Label" parent="StatusContainer"]
+[node name="SkillLabel" type="Label" parent="MarginContainer/StatusContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Skill: 12"
 
-[node name="StaminaLabel" type="Label" parent="StatusContainer"]
+[node name="StaminaLabel" type="Label" parent="MarginContainer/StatusContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Stamina: 20"
 
-[node name="LuckLabel" type="Label" parent="StatusContainer"]
+[node name="LuckLabel" type="Label" parent="MarginContainer/StatusContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Luck: 10"
 
-[node name="GoldLabel" type="Label" parent="StatusContainer"]
+[node name="GoldLabel" type="Label" parent="MarginContainer/StatusContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Gold: 25"
 
-[node name="HSeparator2" type="HSeparator" parent="StatusContainer"]
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/StatusContainer"]
 layout_mode = 2
 
-[node name="ActionButtons" type="VBoxContainer" parent="StatusContainer"]
+[node name="ActionButtons" type="VBoxContainer" parent="MarginContainer/StatusContainer"]
 layout_mode = 2
 
-[node name="RollStatsButton" type="Button" parent="StatusContainer/ActionButtons"]
+[node name="RollStatsButton" type="Button" parent="MarginContainer/StatusContainer/ActionButtons"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Roll New Stats"
+auto_translate_mode = 1
+text = "ROLL_NEW_STATS"
 custom_minimum_size = Vector2(0, 25)
 
-[node name="TestLuckButton" type="Button" parent="StatusContainer/ActionButtons"]
+[node name="TestLuckButton" type="Button" parent="MarginContainer/StatusContainer/ActionButtons"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Test Your Luck"
+auto_translate_mode = 1
+text = "TEST_YOUR_LUCK"
 custom_minimum_size = Vector2(0, 25)
 
-[node name="EatProvisionsButton" type="Button" parent="StatusContainer/ActionButtons"]
-unique_name_in_owner = true  
+[node name="EatProvisionsButton" type="Button" parent="MarginContainer/StatusContainer/ActionButtons"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Eat Provisions"
+auto_translate_mode = 1
+text = "EAT_PROVISIONS"
 custom_minimum_size = Vector2(0, 25)

@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/Game/StoryScene.cs" id="1_story_scene"]
+[ext_resource type="PackedScene" path="res://scenes/panels/ImagePanel.tscn" id="2_image"]
+[ext_resource type="PackedScene" path="res://scenes/panels/StoryPanel.tscn" id="3_story"]
+
+[node name="StoryScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_story_scene")
+
+[node name="Layout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TopRow" type="HBoxContainer" parent="Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ImagePanel" parent="Layout/TopRow" instance=ExtResource("2_image")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="NextButton" type="Button" parent="Layout/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+custom_minimum_size = Vector2(120, 35)
+text = "Next >"
+
+[node name="StoryPanel" parent="Layout" instance=ExtResource("3_story")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1

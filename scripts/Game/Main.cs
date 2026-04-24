@@ -1,387 +1,230 @@
 using Godot;
 using System;
-using System.Collections.Generic;
 using TalismanOfDeath.Data;
 using TalismanOfDeath.Game.Panels;
 
 namespace TalismanOfDeath.Game;
 
-/// <summary>
-/// Talisman of Death - Modularized panel architecture
-/// Main coordinator for all game panels
-/// </summary>
 public partial class Main : Control
 {
-    // Panel references (modularized scene instances)
-    private ImagePanel? _imagePanel;
-    private StoryPanel? _storyPanel;
-    private StatusPanel? _statusPanel;
-    private InventoryPanel? _inventoryPanel;
-    private ChoicesPanel? _choicesPanel;
+    private static readonly string[] AvailableLocales = { "en", "hu" };
+    private static readonly string[] LocaleDisplayNames = { "English", "Magyar" };
+
+    private Control? _contentArea;
     private DiceRollDialog? _diceRollDialog;
-    
-    // UI elements in Main scene
-    private Label? _sectionLabel;
-    private Button? _languageButton;
+    private LineEdit? _sectionInput;
+    private OptionButton? _languageButton;
     private Button? _saveButton;
     private Button? _loadButton;
 
-    private int _currentSection = 1;
-    private LocalizationManager? _localizationManager;
-    private CharacterSheet? _characterSheet;
+    private LocationScene? _locationScene;
+    private StoryScene? _storyScene;
+    private SceneType _activeSceneType = (SceneType)(-1);
 
-    // Section storage with localization keys
-    private readonly Dictionary<int, SectionData> _sections = new()
-    {
-        {1, new SectionData
-        {
-            TextKey = "SECTION_1_TEXT",
-            Choices = new List<Choice>
-            {
-                new() { TextKey = "SECTION_1_CHOICE_1", Target = 17 },
-                new() { TextKey = "SECTION_1_CHOICE_2", Target = 30 }
-            }
-        }},
-        {17, new SectionData
-        {
-            TextKey = "SECTION_17_TEXT",
-            Choices = new List<Choice>
-            {
-                new() { TextKey = "SECTION_17_CHOICE_1", Target = 42 },
-                new() { TextKey = "SECTION_17_CHOICE_2", Target = 1 }
-            }
-        }},
-        {30, new SectionData
-        {
-            TextKey = "SECTION_30_TEXT",
-            Choices = new List<Choice>
-            {
-                new() { TextKey = "SECTION_30_CHOICE_1", Target = 1 },
-                new() { TextKey = "SECTION_30_CHOICE_2", Target = 17 }
-            }
-        }},
-        {42, new SectionData
-        {
-            TextKey = "SECTION_42_TEXT",
-            Choices = new List<Choice>
-            {
-                new() { TextKey = "SECTION_42_CHOICE_1", Target = 1 }
-            }
-        }}
-    };
+    private string _currentSection = "";
+    private string _currentLocale = "en";
+    private CharacterSheet? _characterSheet;
+    private StoryRepository _storyRepository = new();
+    private bool _isReady = false;
 
     public override void _Ready()
     {
-        // Create and add LocalizationManager
-        _localizationManager = new LocalizationManager();
-        AddChild(_localizationManager);
-        
-        // Create and initialize character sheet
+
+        var systemLang = OS.GetLocaleLanguage();
+        _currentLocale = Array.IndexOf(AvailableLocales, systemLang) >= 0 ? systemLang : "en";
+        TranslationServer.SetLocale(_currentLocale);
+
+        _storyRepository.LoadAll(AvailableLocales);
+
         _characterSheet = new CharacterSheet();
-        _characterSheet.RollInitialStats(); // Roll starting stats
-        
-        // Get panel references (modularized scene instances)
-        _imagePanel = GetNode<ImagePanel>("%ImagePanel");
-        _storyPanel = GetNode<StoryPanel>("%StoryPanel");
-        _statusPanel = GetNode<StatusPanel>("%StatusPanel");
-        _inventoryPanel = GetNode<InventoryPanel>("%InventoryPanel");
-        _choicesPanel = GetNode<ChoicesPanel>("%ChoicesPanel");
+        _characterSheet.RollInitialStats();
+
+        _contentArea = GetNode<Control>("MainLayout/ContentArea");
         _diceRollDialog = GetNode<DiceRollDialog>("%DiceRollDialog");
-        
-        // Set character sheet references in panels
-        _statusPanel!.SetCharacterSheet(_characterSheet);
-        _inventoryPanel!.SetCharacterSheet(_characterSheet);
-        
-        // Get UI element references
-        _sectionLabel = GetNode<Label>("%SectionLabel");
-        _languageButton = GetNode<Button>("%LanguageButton");
+        _sectionInput = GetNode<LineEdit>("%SectionInput");
+        _languageButton = GetNode<OptionButton>("%LanguageButton");
         _saveButton = GetNode<Button>("%SaveButton");
         _loadButton = GetNode<Button>("%LoadButton");
+        _sectionInput.TextSubmitted += id => DisplaySection(id.Trim());
 
-        // Connect panel signals
-        _imagePanel!.ImageClicked += OnImageClicked;
-        _choicesPanel!.ChoiceSelected += OnChoiceSelected;
-        _statusPanel!.TestLuckRequested += OnTestLuckRequested;
-        _statusPanel!.RollStatsRequested += OnRollStatsRequested;
-        _statusPanel!.EatProvisionsRequested += OnEatProvisionsRequested;
-        
-        // Connect main UI signals
-        _languageButton!.Pressed += OnLanguageButtonPressed;
+        _locationScene = GD.Load<PackedScene>("res://scenes/game/LocationScene.tscn").Instantiate<LocationScene>();
+        _storyScene = GD.Load<PackedScene>("res://scenes/game/StoryScene.tscn").Instantiate<StoryScene>();
+
+        _locationScene.ChoiceSelected += OnChoiceSelected;
+        _locationScene.TestLuckRequested += OnTestLuckRequested;
+        _locationScene.RollStatsRequested += OnRollStatsRequested;
+        _locationScene.EatProvisionsRequested += OnEatProvisionsRequested;
+        _storyScene.NextPressed += DisplaySection;
+
+        _locationScene.Visible = false;
+        _storyScene.Visible = false;
+        _contentArea.AddChild(_locationScene);
+        _contentArea.AddChild(_storyScene);
+        _locationScene.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
+        _storyScene.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
+        _locationScene.SetCharacterSheet(_characterSheet);
+
         _saveButton!.Pressed += OnSaveButtonPressed;
         _loadButton!.Pressed += OnLoadButtonPressed;
 
-        // Add to localized nodes group for language change notifications
-        AddToGroup("localized_nodes");
-        
-        // Setup initial UI state
-        UpdateLanguageButton();
-        SetupPlaceholderPanels();
-        
-        GD.Print(_localizationManager.GetText("LOG_ADVENTURE_BEGINS"));
-        DisplaySection(1);
+        for (int i = 0; i < LocaleDisplayNames.Length; i++)
+            _languageButton!.AddItem(LocaleDisplayNames[i], i);
+        _languageButton!.Selected = Array.IndexOf(AvailableLocales, _currentLocale);
+        _languageButton!.ItemSelected += OnLanguageSelected;
+
+        var root = GetTree().Root;
+        root.ContentScaleMode = Window.ContentScaleModeEnum.Disabled;
+        root.ContentScaleSize = new Vector2I(0, 0);
+
+        _isReady = true;
+        DisplaySection(_storyRepository.StartSection);
     }
 
-    private void SetupPlaceholderPanels()
+    public override void _Notification(int what)
     {
-        // Setup status panel with placeholder data
-        string[] statusLabels = {
-            _localizationManager!.GetText("SECTION_LABEL"),
-            _localizationManager.GetText("SKILL_LABEL"),
-            _localizationManager.GetText("STAMINA_LABEL"),
-            _localizationManager.GetText("LUCK_LABEL"),
-            _localizationManager.GetText("GOLD_LABEL")
-        };
-        _statusPanel!.SetupPlaceholderData(statusLabels, _currentSection);
-
-        // Setup inventory panel placeholder  
-        var itemsText = $"{_localizationManager.GetText("ITEMS_LABEL")}\n• Sword\n• Potion\n• Provisions";
-        _inventoryPanel!.SetPlaceholderItems(itemsText);
+        if (!_isReady) return;
+        if (what == NotificationTranslationChanged)
+            DisplaySection(_currentSection);
     }
 
-    private void DisplaySection(int sectionId)
+    private void DisplaySection(string sectionId)
     {
         _currentSection = sectionId;
+        _sectionInput!.Text = sectionId;
 
-        // Update image panel
-        _imagePanel!.UpdateImage(_localizationManager!.GetText("SECTION_IMAGE"));
-        
-        // Update section label in bottom status bar
-        _sectionLabel!.Text = $"{_localizationManager.GetText("SECTION_LABEL")} {sectionId}";
+        var section = _storyRepository.GetSection(sectionId, _currentLocale);
+        var image = section != null ? LoadSectionImage(section.Image) : null;
 
-        if (_sections.TryGetValue(sectionId, out var sectionData))
+        if (section == null)
         {
-            // Build section text (without section number prefix)
-            string sectionText;
-            
-            if (sectionData.TextKey == "SECTION_NOT_IMPLEMENTED")
-            {
-                sectionText = $"[color=red]{_localizationManager.GetText(sectionData.TextKey)}[/color]\n\n";
-                if (!string.IsNullOrEmpty(sectionData.AdditionalTextKey))
-                {
-                    sectionText += _localizationManager.GetText(sectionData.AdditionalTextKey, sectionData.AdditionalTextArgs ?? new object[0]);
-                }
-            }
-            else
-            {
-                sectionText = _localizationManager.GetText(sectionData.TextKey);
-            }
-            
-            // Update story panel
-            _storyPanel!.UpdateStoryText(sectionText);
-
-            // Setup choices panel
-            _choicesPanel!.SetupChoices(sectionData.Choices, (key) => _localizationManager.GetText(key));
-            
-            // Update status panel with current section
-            _statusPanel!.UpdateSection(sectionId, _localizationManager.GetText("SECTION_LABEL"));
+            ActivateScene(SceneType.Location);
+            var error = $"[color=red]{string.Format(Tr("ERROR_SECTION_NOT_FOUND"), sectionId)}[/color]";
+            _locationScene!.ShowError(error);
+            return;
         }
-        else
+
+        ActivateScene(section.Type);
+
+        switch (section.Type)
         {
-            var errorText = $"[color=red]{_localizationManager.GetText("ERROR_SECTION_NOT_FOUND", sectionId)}[/color]";
-            _storyPanel!.UpdateStoryText(errorText);
-            _choicesPanel!.ClearChoices();
+            case SceneType.Story:
+                _storyScene!.DisplaySection(section, image);
+                break;
+            default:
+                _locationScene!.DisplaySection(section, image);
+                break;
         }
     }
 
-    private void OnChoiceSelected(int target, int choiceNumber)
+    private void ActivateScene(SceneType type)
     {
-        GD.Print(_localizationManager!.GetText("LOG_SELECTED_OPTION", choiceNumber, target));
+        if (_activeSceneType == type) return;
+        _activeSceneType = type;
+        _locationScene!.Visible = type != SceneType.Story;
+        _storyScene!.Visible = type == SceneType.Story;
+    }
+
+    private static Texture2D? LoadSectionImage(string? imageName)
+    {
+        if (imageName == null) return null;
+        var path = $"res://assets/images/{imageName}";
+        return ResourceLoader.Exists(path) ? GD.Load<Texture2D>(path) : null;
+    }
+
+    private void OnChoiceSelected(string target, int choiceNumber)
+    {
+        GD.Print($"Choice {choiceNumber} → section {target}");
         DisplaySection(target);
     }
 
-    private void OnImageClicked()
+    private void OnLanguageSelected(long index)
     {
-        GD.Print("Section image clicked from ImagePanel");
+        _currentLocale = AvailableLocales[(int)index];
+        TranslationServer.SetLocale(_currentLocale);
     }
 
-    private void OnLanguageButtonPressed()
-    {
-        if (_localizationManager == null) return;
-        
-        var currentLang = _localizationManager.GetCurrentLanguage();
-        var availableLanguages = LocalizationManager.AvailableLanguages;
-        var currentIndex = Array.IndexOf(availableLanguages, currentLang);
-        var nextIndex = (currentIndex + 1) % availableLanguages.Length;
-        var nextLanguage = availableLanguages[nextIndex];
-        
-        _localizationManager.SetLanguage(nextLanguage);
-    }
-
-    private void UpdateLanguageButton()
-    {
-        var currentLang = _localizationManager!.GetCurrentLanguage();
-        var displayName = _localizationManager.GetLanguageName(currentLang);
-        _languageButton!.Text = $"{_localizationManager.GetText("LANGUAGE")}: {displayName}";
-    }
-
-    // Called when language changes
-    public void _on_language_changed()
-    {
-        if (_localizationManager == null) return;
-        
-        // Update language button text
-        UpdateLanguageButton();
-        
-        // Refresh all panels  
-        SetupPlaceholderPanels();
-        DisplaySection(_currentSection);
-    }
-
-    // Debug function - can test from console
-    public void GotoSection(int sectionId)
-    {
-        DisplaySection(sectionId);
-    }
-    
-    // StatusPanel signal handlers
     private void OnTestLuckRequested()
     {
         if (_characterSheet == null || _diceRollDialog == null) return;
-        
-        // Show dice roll dialog for luck test
         _diceRollDialog.SetupRoll(_characterSheet, "luck", _characterSheet.Luck);
         _diceRollDialog.DiceRollCompleted += OnLuckTestCompleted;
         _diceRollDialog.Show();
     }
-    
+
     private void OnRollStatsRequested()
     {
         if (_characterSheet == null || _diceRollDialog == null) return;
-        
-        // Show dice roll dialog for stat rolling
         _diceRollDialog.SetupRoll(_characterSheet, "general");
         _diceRollDialog.DiceRollCompleted += OnStatsRollCompleted;
         _diceRollDialog.Show();
     }
-    
+
     private void OnEatProvisionsRequested()
     {
         if (_characterSheet == null) return;
-        
-        if (_characterSheet.EatProvisions())
-        {
-            GD.Print("Ate provisions and restored 4 Stamina!");
-        }
-        else
-        {
+        if (!_characterSheet.EatProvisions())
             GD.Print("No provisions available!");
-        }
     }
-    
-    // Dice roll completion handlers
+
     private void OnLuckTestCompleted(int die1, int die2, int total)
     {
-        if (_characterSheet == null) return;
-        
-        // Test Your Luck mechanic already handled in CharacterSheet.TestYourLuck()
-        var lucky = total <= _characterSheet.Luck + 1; // +1 because luck was already decremented
-        
-        // Disconnect the signal
         _diceRollDialog!.DiceRollCompleted -= OnLuckTestCompleted;
-        
-        GD.Print($"Luck test result: {(lucky ? "Lucky" : "Unlucky")} (rolled {total})");
+        var lucky = total <= _characterSheet!.Luck + 1;
+        GD.Print($"Luck test: {(lucky ? "Lucky" : "Unlucky")} (rolled {total})");
     }
-    
+
     private void OnStatsRollCompleted(int die1, int die2, int total)
     {
-        if (_characterSheet == null) return;
-        
-        // Re-roll all initial stats
-        _characterSheet.RollInitialStats();
-        
-        // Disconnect the signal
         _diceRollDialog!.DiceRollCompleted -= OnStatsRollCompleted;
-        
-        GD.Print("New character stats rolled!");
+        _characterSheet!.RollInitialStats();
+        GD.Print("New stats rolled!");
     }
-    
-    // Save/Load handlers
-    private void OnSaveButtonPressed()
-    {
-        SaveGame();
-    }
-    
-    private void OnLoadButtonPressed()
-    {
-        LoadGame();
-    }
-    
+
+    private void OnSaveButtonPressed() => SaveGame();
+    private void OnLoadButtonPressed() => LoadGame();
+
     private void SaveGame()
     {
         if (_characterSheet == null) return;
-        
         try
         {
             var saveData = new Godot.Collections.Dictionary<string, Variant>
             {
                 ["CurrentSection"] = _currentSection,
+                ["CurrentLocale"] = _currentLocale,
                 ["CharacterData"] = _characterSheet.SaveCharacterData(),
-                ["SaveTimestamp"] = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                ["SaveTimestamp"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
-            
-            var file = FileAccess.Open("user://talisman_save.dat", FileAccess.ModeFlags.Write);
-            if (file != null)
-            {
-                file.StoreVar(saveData);
-                file.Close();
-                GD.Print("Game saved successfully!");
-            }
-            else
-            {
-                GD.PrintErr("Failed to open save file for writing!");
-            }
+            using var file = FileAccess.Open("user://talisman_save.dat", FileAccess.ModeFlags.Write);
+            if (file != null) { file.StoreVar(saveData); GD.Print("Game saved."); }
         }
-        catch (System.Exception e)
-        {
-            GD.PrintErr($"Save failed: {e.Message}");
-        }
+        catch (Exception e) { GD.PrintErr($"Save failed: {e.Message}"); }
     }
-    
+
     private void LoadGame()
     {
         if (_characterSheet == null) return;
-        
         try
         {
-            var file = FileAccess.Open("user://talisman_save.dat", FileAccess.ModeFlags.Read);
-            if (file == null)
-            {
-                GD.Print("No save file found!");
-                return;
-            }
-            
+            using var file = FileAccess.Open("user://talisman_save.dat", FileAccess.ModeFlags.Read);
+            if (file == null) { GD.Print("No save file found."); return; }
+
             var saveData = file.GetVar().AsGodotDictionary<string, Variant>();
-            file.Close();
-            
-            if (saveData != null)
+            if (saveData == null) return;
+
+            if (saveData.TryGetValue("CurrentLocale", out var localeVar))
             {
-                // Load current section
-                if (saveData.ContainsKey("CurrentSection"))
-                {
-                    var section = saveData["CurrentSection"].AsInt32();
-                    _currentSection = section;
-                }
-                
-                // Load character data
-                if (saveData.ContainsKey("CharacterData"))
-                {
-                    var characterData = saveData["CharacterData"].AsGodotDictionary<string, Variant>();
-                    _characterSheet.LoadCharacterData(characterData);
-                }
-                
-                // Update display
-                DisplaySection(_currentSection);
-                
-                var timestamp = "Unknown";
-                if (saveData.ContainsKey("SaveTimestamp"))
-                    timestamp = saveData["SaveTimestamp"].AsString();
-                    
-                GD.Print($"Game loaded successfully! (Saved: {timestamp})");
+                _currentLocale = localeVar.AsString();
+                TranslationServer.SetLocale(_currentLocale);
+                _languageButton!.Selected = Array.IndexOf(AvailableLocales, _currentLocale);
             }
+            if (saveData.TryGetValue("CharacterData", out var charVar))
+                _characterSheet.LoadCharacterData(charVar.AsGodotDictionary<string, Variant>());
+            if (saveData.TryGetValue("CurrentSection", out var sectionVar))
+                DisplaySection(sectionVar.AsString());
+
+            GD.Print("Game loaded.");
         }
-        catch (System.Exception e)
-        {
-            GD.PrintErr($"Load failed: {e.Message}");
-        }
+        catch (Exception e) { GD.PrintErr($"Load failed: {e.Message}"); }
     }
 }

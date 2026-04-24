@@ -1,0 +1,144 @@
+- start: BG-1
+  sections:
+  - id: BG-1
+    type: story
+    image: BG-1.png
+    text: >
+      Lassan visszanyered az eszméletedet. Egy vidáman trillázó énekesmadár hangjára felnyitod a szemedet. Zöld
+      bársonypamlagon fekszel, egy felhők közt úszó hatalmas fehér kastély legmagasabb tornyában. Fölkelsz, hogy
+      körülnézz. A csillogó óarany tollú énekesmadár a vár ormán ragyog. Mögötte az óceánkék égbolt, melyen sehol sem
+      látod a napot.
+
+      Különös, idegen ruhát viselsz, sötétzöld bricseszt és a mellén kivarrt bőrzekét. Lábadon rőtvörös puha, kényelmes
+      borjúbőr csizma feszül, nadrágod a csizmaszárba tűrve. Nehéz kard lóg az oldaladon, és legnagyobb meglepetésedre
+      érzed, hogy ügyesen tudsz vele bánni. Miközben a madár trilláit hallgatod, megpróbálod felidézni a Föld emlékét,
+      de minden olyan távoli és ködös. Valaki kiemelt jólismert világodból és megtanított a kardforgatás művészetére.
+      Arra nem emlékszel, hogy ki és miért tanított meg rá, de a kard markolata ismerősen simul a kezedhez. Előhúzod,
+      szúrsz és hárítasz, és elcsodálkozol, hogy kardod gyorsabban hasítja a levegőt, mint a szemed követni tudná.
+    choices:
+      BG-2: Tovább
+
+  - id: BG-2
+    type: story
+    image: BG-2.png
+    text: >
+      A madarat látszólag nem zavarja, kardforgató tudományod bemutatója, te viszont igencsak meglepődsz, mikor vidám,
+      fuvolázó hangján megszólal.
+
+      - Köszöntelek, Végzet Bajnoka! Ne aggódj, egyelőre még biztonságban vagy.
+      - Hol vagyok? - kérded, mintha csak álom volna az egész.
+      - Attól tartok, messze, messze az otthonodtól. Ez itt az Orb, és az Istenek Kertjében vagy.
+      - Mi az az Orb? - kérded.
+      - Ó, az egészen más, mint a Föld; majd meglátod. Különös világ, tele csodákkal. Az emberek mellett nemcsak hozzám
+      hasonló beszélő állatok lakják, hanem hátborzongató és vérszomjas szörnyetegek, óriások, sárkányok és démonok is.
+      A városokban mágusok és varázslók, a mágia nagy tudói élnek. De ne félj! Azért választottunk bajnokunknak, mert a
+      földiek közül te vagy a legesélyesebb a sikerre. Most pedig eleget kell tennem a megbízatásomnak. Jöjj! Uraim
+      meghagyták, hogy vezessetek hozzájuk a lenti terembe. Kérlek, kövess!
+
+      Ezzel az aranymadár fölröppen és lefelé száll egy csigalépcsőt követve.
+    choices:
+      BG-3: Tovább
+
+  - id: BG-3
+    type: story
+    image: BG-3.png
+    text: >
+      Hitetlenkedve elindulsz utána a kőlépcsőn. Egy nagy, kör alakú szobába érsz: két alak áll ott, akik jöttödre feléd
+      fordulnak:
+      - Légy üdvözölve - mondja az egyikük, egy díszes lebernyegbe öltözött nőalak. A feje teljesen kopasz. Ahogy a nő
+      feléd lép, csillogó ruhája folyton változtatja a színét; mielőtt rádöbbennél, hogy mi történik, már el is bájolt.
+      Arcába nézve saját képmásodat pillantod meg, amint egy óriási templomban élethalálharcot vívsz.
+
+      Változik a kép, újra magadat látod, amint egy fallal körülvett városból jössz ki. Egyedül vágsz át a kihalt
+      ingoványon, hogy egy dzsungelben köss ki, ahol kék bőrű ördögök vesznek körül. Végigfut a hideg a hátadon, amikor
+      rájössz, hogy sorsod villant fel előtted. Csak akkor veszed észre, hogy a nő teljesen sima arcán még szemek
+      sincsenek, amikor a látomásnak vége.
+    choices:
+      BG-4: Tovább
+
+  - id: BG-4
+    type: story
+    image: BG-4.png
+    text: >
+      A másik a szemed láttára változik át. Az egyik pillanatban még nagy tudású, ősz vénember, a másikban már koraérett
+      gyermek. Átalakulása mindössze néhány pillanatig tart, mégis olyan finoman történik mindez, hogy szinte észre sem
+      lehet venni, hogy arcvonásai megváltoznak. Hangja lágy, nem érződik rajta a kora.
+
+      - Azért idéztünk meg ide, Orb földre - mondja -‚ mert meg kívánjuk akadályozni a természet egyensúlyának végzetes
+      felborulását. A kozmikus mérleg túlságosan is felbillent, és neked is részt kell venned a visszaállításában! Mi
+      itt, az Istenek Kertjében nem foglalkozhatunk azzal, hogy helyrehozzuk a dolgokat. Mi nem küzdhetünk meg azzal,
+      aki káosszal fenyegeti az Orbot. Mi inkább az embereket használjuk fel erre a célra. De hogy sikerrel jársz-e,
+      azt nem tudom.
+    choices:
+      BG-5: Tovább
+
+  - id: BG-5
+    type: story
+    image: BG-5.png
+    text: >
+      A terem padlója, amelyen állsz, az elképzelhető legrészletesebb, és legvalószerűbb térkép. Apró embereket is látsz
+      rajta, akik ennek a világnak a földjeit művelik, és utcáit járják. Csúcsos tornyú kastélyok világa ez, ahol lovagok
+      paripákon száguldoznak, szélben lobogó zászlókat tartó kísérőik társaságában, s ahol magas fallal védett,
+      templomokkal és bástyákkal teli különös Városok sorakoznak, de a pompa mellett orgyilkosoknak és tolvajoknak
+      találkahelyül szolgáló rejtett pincék is vannak. A szem nélküli halhatatlan ekkor odalép hozzád, és megcirógatja az
+      arcodat. Ruhája most olyan, akár a tenger kékje.
+
+      - Most leküldünk az Orb mélyébe - mondja. - Ha a Halál karmai közé kerülsz, nem segíthetünk rajtad. Ne okozz
+      nekünk csalódást!
+    choices:
+      BG-6: Tovább
+
+  - id: BG-6
+    type: story
+    image: BG-6.png
+    text: >
+      - Miben ne okozzak nektek csalódást? - kérdeznéd, de ekkor legnagyobb rémületedre a térkép egyik sötét repedése
+      kérlelhetetlenül beszippant.
+
+      Feldühít a felismerés, hogy sorsodat mások irányítják, s úgy határozol, hogy mindenáron visszatérsz otthonodba,
+      a Földre. Orb világa azonban elnyel, s a félelemtől elveszted az eszméletedet.
+    choices:
+      1: "**ÉS MOST LAPOZZ!**"
+
+  - id: 1
+    type: location
+    text: >
+      Mikor magadhoz térsz körülnézel: hatalmas bolthajtásos csarnokban állsz
+      mélyen a föld alatt. A levegő hűvös és azon töprengsz vajon milyen borzalmas
+      vég vár rád.
+
+      Teljesen egyedül vagy ezen a világon egyetlen barát nélkül és fogalmad sincs
+      milyen ördögi veszélyek leselkedhetnek rád itt oly távol az otthonodtól.
+
+      A csarnok végében két boltíves kijáratot látsz. Fény villan a távolban és a
+      csarnokon pokoli üvöltés visszhangzik végig.
+    choices:
+      17: Kirohansz a hozzád közelebb lévő folyosón
+      30: Ott maradsz és kardot rántasz
+
+  - id: 17
+    type: location
+    text: >
+      Amint a boltíves folyosó vészjósló sötétje felé rohansz egy kattanást hallasz
+      amit félelmetes robaj követ. A lábad alatt megremeg a föld.
+    choices:
+      42: A boltíven át beleveted magad a sötétbe
+      1: Megtorpansz
+
+  - id: 30
+    type: location
+    text: >
+      A lépések egyre közelednek. Hirtelen mennydörgéshez hasonló hang visszhangzik
+      végig a barlangon. Körülnézve látod hogy mindkét boltíves kijáratot hatalmas
+      kőtáblák zárják le. Csapdába kerültél.
+    choices:
+      1: Várakozol és figyelsz
+      17: Kétségbeesetten keresel más kiutat
+
+  - id: 42
+    type: location
+    text: >
+      Beleveted magad a boltíven át a koromsötétbe és keményen landolsz a hideg
+      kövön. Ez a bekezdés még nincs átiratva.
+    choices:
+      1: Vissza az elejére
