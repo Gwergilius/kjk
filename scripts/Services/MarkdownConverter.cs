@@ -14,8 +14,9 @@ public static class MarkdownConverter
     private static readonly Regex ItalicUnderscore = new(@"_(.+?)_", RegexOptions.Compiled);
     private static readonly Regex Strike = new(@"~~(.+?)~~", RegexOptions.Compiled);
     private static readonly Regex Code = new(@"`(.+?)`", RegexOptions.Compiled);
-    private static readonly Regex DialogueLine = new(@"\n--\s*", RegexOptions.Compiled);
     private static readonly Regex SingleNewline = new(@"\n(?!\n)", RegexOptions.Compiled);
+    private static readonly Regex DialogueLine = new(@"--(?!-)\s*", RegexOptions.Compiled);
+    private static readonly Regex ExcessNewlines = new(@"\n{3,}", RegexOptions.Compiled);
 
     /// <summary>
     /// Converts a subset of Markdown to Godot BBCode.
@@ -56,8 +57,9 @@ public static class MarkdownConverter
     public static string ExpandParagraphs(string text)
     {
         if (string.IsNullOrEmpty(text)) return text;
+        text = SingleNewline.Replace(text, "\n\n");
         text = DialogueLine.Replace(text, "\n— ");
-        return SingleNewline.Replace(text, "\n\n");
+        return ExcessNewlines.Replace(text, "\n\n");
     }
 
     /// <summary>
