@@ -14,6 +14,7 @@ public static class MarkdownConverter
     private static readonly Regex ItalicUnderscore = new(@"_(.+?)_", RegexOptions.Compiled);
     private static readonly Regex Strike = new(@"~~(.+?)~~", RegexOptions.Compiled);
     private static readonly Regex Code = new(@"`(.+?)`", RegexOptions.Compiled);
+    private static readonly Regex DialogueLine = new(@"\n--\s*", RegexOptions.Compiled);
     private static readonly Regex SingleNewline = new(@"\n(?!\n)", RegexOptions.Compiled);
 
     /// <summary>
@@ -48,12 +49,14 @@ public static class MarkdownConverter
     }
 
     /// <summary>
-    /// Expands single newlines to double newlines so each line becomes a paragraph.
+    /// Expands single newlines to paragraph breaks, with special handling for dialogue lines.
+    /// Lines prefixed with -- become a soft line break rendered with an em dash (—).
     /// Already-blank lines (\\n\\n) are left unchanged.
     /// </summary>
     public static string ExpandParagraphs(string text)
     {
         if (string.IsNullOrEmpty(text)) return text;
+        text = DialogueLine.Replace(text, "\n— ");
         return SingleNewline.Replace(text, "\n\n");
     }
 
