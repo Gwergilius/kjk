@@ -25,7 +25,7 @@ public partial class ChoicesPanel : PanelContainer
             var choice = choices[i];
             var button = new Button
             {
-                Text = $"{i + 1}. {choice.Text}",
+                Text = $"{i + 1}. {MarkdownConverter.StripMarkdown(choice.Text)}",
                 SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
                 SizeFlagsVertical = Control.SizeFlags.ShrinkCenter,
                 AutowrapMode = TextServer.AutowrapMode.WordSmart,
