@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://hco2ivrxtxm2" path="res://scripts/Game/Main.cs" id="1_3lmcg"]
 [ext_resource type="PackedScene" uid="uid://cj1mk4xl6tgbw" path="res://scenes/panels/DiceRollDialog.tscn" id="2_dice"]
+[ext_resource type="PackedScene" uid="uid://cfgp1nel0tgbw" path="res://scenes/panels/ConfigPanel.tscn" id="3_config"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -37,12 +38,20 @@ grow_vertical = 2
 layout_mode = 2
 
 [node name="Title" type="Label" parent="MainLayout/TitleBar"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 modulate = Color(0.1, 0.05, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "GAME_TITLE"
 horizontal_alignment = 1
+metadata/_font_offset = 4
+
+[node name="GearButton" type="Button" parent="MainLayout/TitleBar"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(32, 0)
+text = "⚙"
 
 [node name="HSeparator" type="HSeparator" parent="MainLayout"]
 layout_mode = 2
@@ -71,24 +80,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "id"
 
-[node name="LanguageButton" type="OptionButton" parent="MainLayout/DebugStatusBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-
-[node name="SaveButton" type="Button" parent="MainLayout/DebugStatusBar"]
-unique_name_in_owner = true
-auto_translate_mode = 1
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 2
-text = "SAVE"
-
-[node name="LoadButton" type="Button" parent="MainLayout/DebugStatusBar"]
-unique_name_in_owner = true
-auto_translate_mode = 1
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 2
-text = "LOAD"
-
 [node name="DiceRollDialog" parent="." instance=ExtResource("2_dice")]
+unique_name_in_owner = true
+
+[node name="ConfigPanel" parent="." instance=ExtResource("3_config")]
 unique_name_in_owner = true

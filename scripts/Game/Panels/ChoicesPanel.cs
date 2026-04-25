@@ -1,6 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using TalismanOfDeath.Data;
+using TalismanOfDeath.Services;
 
 namespace TalismanOfDeath.Game.Panels;
 
@@ -31,6 +32,9 @@ public partial class ChoicesPanel : PanelContainer
                 CustomMinimumSize = new Vector2(0, 40),
                 ClipContents = false
             };
+            // Tag and apply current font size so FontService covers newly created buttons
+            button.SetMeta("_font_offset", Variant.From(0));
+            FontService.Instance.ApplyToNode(button);
 
             var target = choice.Target;
             var number = i + 1;

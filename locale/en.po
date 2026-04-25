@@ -68,3 +68,9 @@ msgstr "Save"
 
 msgid "LOAD"
 msgstr "Load"
+
+msgid "CONFIG_TITLE"
+msgstr "Settings"
+
+msgid "FONT_SIZE_LABEL"
+msgstr "Font Size"

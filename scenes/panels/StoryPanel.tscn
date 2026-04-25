@@ -25,3 +25,4 @@ fit_content = true
 bbcode_enabled = true
 text = "[center]Loading story...[/center]"
 scroll_active = false
+metadata/_font_offset = 0
