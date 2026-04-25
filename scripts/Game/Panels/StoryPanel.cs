@@ -1,4 +1,5 @@
 using Godot;
+using TalismanOfDeath.Services;
 
 namespace TalismanOfDeath.Game.Panels;
 
@@ -12,7 +13,7 @@ public partial class StoryPanel : Control
     public override void _Ready()
     {
         _storyText = GetNode<RichTextLabel>("%StoryText");
-        _storyArea = GetNode<ScrollContainer>("StoryArea");
+        _storyArea = GetNode<ScrollContainer>("MarginContainer/StoryArea");
     }
 
     public override void _UnhandledKeyInput(InputEvent @event)
@@ -45,7 +46,7 @@ public partial class StoryPanel : Control
     {
         if (_storyText != null)
         {
-            _storyText.Text = text;
+            _storyText.Text = MarkdownConverter.ToBBCode(MarkdownConverter.ExpandParagraphs(text));
             if (_storyArea != null)
                 _storyArea.ScrollVertical = 0;
         }

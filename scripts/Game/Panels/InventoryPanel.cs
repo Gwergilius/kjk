@@ -1,6 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using TalismanOfDeath.Data;
+using TalismanOfDeath.Services;
 
 namespace TalismanOfDeath.Game.Panels;
 
@@ -65,6 +66,6 @@ public partial class InventoryPanel : PanelContainer
                 sb.AppendLine($"• {name}");
         }
 
-        _itemsList.Text = sb.ToString().TrimEnd();
+        _itemsList.Text = MarkdownConverter.ToBBCode(sb.ToString().TrimEnd());
     }
 }
