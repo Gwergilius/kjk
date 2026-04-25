@@ -18,10 +18,12 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="InventoryTitle" type="Label" parent="MarginContainer/InventoryContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 auto_translate_mode = 1
 text = "INVENTORY_TITLE"
 horizontal_alignment = 1
+metadata/_font_offset = 2
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/InventoryContainer"]
 layout_mode = 2
@@ -34,3 +36,4 @@ bbcode_enabled = true
 fit_content = true
 scroll_active = false
 text = ""
+metadata/_font_offset = 0

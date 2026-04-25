@@ -18,10 +18,12 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="StatusTitle" type="Label" parent="MarginContainer/StatusContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 auto_translate_mode = 1
 text = "STATUS_TITLE"
 horizontal_alignment = 1
+metadata/_font_offset = 2
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/StatusContainer"]
 layout_mode = 2
@@ -30,21 +32,25 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Skill: 12"
+metadata/_font_offset = 0
 
 [node name="StaminaLabel" type="Label" parent="MarginContainer/StatusContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Stamina: 20"
+metadata/_font_offset = 0
 
 [node name="LuckLabel" type="Label" parent="MarginContainer/StatusContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Luck: 10"
+metadata/_font_offset = 0
 
 [node name="GoldLabel" type="Label" parent="MarginContainer/StatusContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Gold: 25"
+metadata/_font_offset = 0
 
 [node name="HSeparator2" type="HSeparator" parent="MarginContainer/StatusContainer"]
 layout_mode = 2
@@ -58,6 +64,7 @@ layout_mode = 2
 auto_translate_mode = 1
 text = "ROLL_NEW_STATS"
 custom_minimum_size = Vector2(0, 25)
+metadata/_font_offset = 0
 
 [node name="TestLuckButton" type="Button" parent="MarginContainer/StatusContainer/ActionButtons"]
 unique_name_in_owner = true
@@ -65,6 +72,7 @@ layout_mode = 2
 auto_translate_mode = 1
 text = "TEST_YOUR_LUCK"
 custom_minimum_size = Vector2(0, 25)
+metadata/_font_offset = 0
 
 [node name="EatProvisionsButton" type="Button" parent="MarginContainer/StatusContainer/ActionButtons"]
 unique_name_in_owner = true
@@ -72,3 +80,4 @@ layout_mode = 2
 auto_translate_mode = 1
 text = "EAT_PROVISIONS"
 custom_minimum_size = Vector2(0, 25)
+metadata/_font_offset = 0

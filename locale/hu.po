@@ -68,3 +68,9 @@ msgstr "Mentés"
 
 msgid "LOAD"
 msgstr "Betöltés"
+
+msgid "CONFIG_TITLE"
+msgstr "Beállítások"
+
+msgid "FONT_SIZE_LABEL"
+msgstr "Betűméret"

@@ -2,6 +2,7 @@ using Godot;
 using System;
 using TalismanOfDeath.Data;
 using TalismanOfDeath.Game.Panels;
+using TalismanOfDeath.Services;
 
 namespace TalismanOfDeath.Game;
 
@@ -13,9 +14,8 @@ public partial class Main : Control
     private Control? _contentArea;
     private DiceRollDialog? _diceRollDialog;
     private LineEdit? _sectionInput;
-    private OptionButton? _languageButton;
-    private Button? _saveButton;
-    private Button? _loadButton;
+    private Button? _gearButton;
+    private ConfigPanel? _configPanel;
 
     private LocationScene? _locationScene;
     private StoryScene? _storyScene;
@@ -29,7 +29,6 @@ public partial class Main : Control
 
     public override void _Ready()
     {
-
         var systemLang = OS.GetLocaleLanguage();
         _currentLocale = Array.IndexOf(AvailableLocales, systemLang) >= 0 ? systemLang : "en";
         TranslationServer.SetLocale(_currentLocale);
@@ -42,10 +41,11 @@ public partial class Main : Control
         _contentArea = GetNode<Control>("MainLayout/ContentArea");
         _diceRollDialog = GetNode<DiceRollDialog>("%DiceRollDialog");
         _sectionInput = GetNode<LineEdit>("%SectionInput");
-        _languageButton = GetNode<OptionButton>("%LanguageButton");
-        _saveButton = GetNode<Button>("%SaveButton");
-        _loadButton = GetNode<Button>("%LoadButton");
+        _gearButton = GetNode<Button>("%GearButton");
+        _configPanel = GetNode<ConfigPanel>("%ConfigPanel");
+
         _sectionInput.TextSubmitted += id => DisplaySection(id.Trim());
+        _gearButton.Pressed += () => _configPanel!.Toggle();
 
         _locationScene = GD.Load<PackedScene>("res://scenes/game/LocationScene.tscn").Instantiate<LocationScene>();
         _storyScene = GD.Load<PackedScene>("res://scenes/game/StoryScene.tscn").Instantiate<StoryScene>();
@@ -64,17 +64,17 @@ public partial class Main : Control
         _storyScene.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
         _locationScene.SetCharacterSheet(_characterSheet);
 
-        _saveButton!.Pressed += OnSaveButtonPressed;
-        _loadButton!.Pressed += OnLoadButtonPressed;
-
-        for (int i = 0; i < LocaleDisplayNames.Length; i++)
-            _languageButton!.AddItem(LocaleDisplayNames[i], i);
-        _languageButton!.Selected = Array.IndexOf(AvailableLocales, _currentLocale);
-        _languageButton!.ItemSelected += OnLanguageSelected;
+        _configPanel.Initialize(LocaleDisplayNames, Array.IndexOf(AvailableLocales, _currentLocale), FontService.Instance.BaseSize);
+        _configPanel.LanguageSelected += OnLanguageSelected;
+        _configPanel.SaveRequested += SaveGame;
+        _configPanel.LoadRequested += LoadGame;
+        _configPanel.FontSizeChanged += size => FontService.Instance.SetBaseSize(size);
 
         var root = GetTree().Root;
         root.ContentScaleMode = Window.ContentScaleModeEnum.Disabled;
         root.ContentScaleSize = new Vector2I(0, 0);
+
+        FontService.Instance.RegisterScene(this);
 
         _isReady = true;
         DisplaySection(_storyRepository.StartSection);
@@ -137,9 +137,9 @@ public partial class Main : Control
         DisplaySection(target);
     }
 
-    private void OnLanguageSelected(long index)
+    private void OnLanguageSelected(int index)
     {
-        _currentLocale = AvailableLocales[(int)index];
+        _currentLocale = AvailableLocales[index];
         TranslationServer.SetLocale(_currentLocale);
     }
 
@@ -180,9 +180,6 @@ public partial class Main : Control
         GD.Print("New stats rolled!");
     }
 
-    private void OnSaveButtonPressed() => SaveGame();
-    private void OnLoadButtonPressed() => LoadGame();
-
     private void SaveGame()
     {
         if (_characterSheet == null) return;
@@ -216,7 +213,7 @@ public partial class Main : Control
             {
                 _currentLocale = localeVar.AsString();
                 TranslationServer.SetLocale(_currentLocale);
-                _languageButton!.Selected = Array.IndexOf(AvailableLocales, _currentLocale);
+                _configPanel!.SetLanguage(Array.IndexOf(AvailableLocales, _currentLocale));
             }
             if (saveData.TryGetValue("CharacterData", out var charVar))
                 _characterSheet.LoadCharacterData(charVar.AsGodotDictionary<string, Variant>());
