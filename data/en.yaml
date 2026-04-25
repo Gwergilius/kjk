@@ -26,11 +26,11 @@
       The songbird seems unperturbed by your fine display of swordsmanship, but you are surprised when it cocks its head
       and speaks to you, its voice fluting merrily.
 
-      - `Welcome, Champion of Fate. Do not be dismayed, you are not yet in danger.`
-      - `Where am I? you ask, feeling as if you are in a dream.
-      - `Far, far from your home, I fear to say. This is the world of Orb and you are in the Garden of the Gods.`
-      - `What is Orb?` - you demand.
-      - `You will find it most strange and full of wonder, for it is very different from Earth. Men must share it not
+      -- `Welcome, Champion of Fate. Do not be dismayed, you are not yet in danger.`
+      -- `Where am I? you ask, feeling as if you are in a dream.
+      -- `Far, far from your home, I fear to say. This is the world of Orb and you are in the Garden of the Gods.`
+      -- `What is Orb?` - you demand.
+      -- `You will find it most strange and full of wonder, for it is very different from Earth. Men must share it not
       just with talking creatures such as but with weird and fell monsters, giants, dragons and demons. There are
       warlocks and sorcerers, too, great wielders of magic, in the cities. But do not fear, you have been chosen to be
       our champion, for you are more likely to succeed than any other on Earth. Now I must complete my task. Come, my
@@ -47,7 +47,7 @@
       Shaking your head in confusion you descend the stone steps into a large circular room where two beings turn
       towards you.
 
-      - `Welcome,` says one, a pale female figure enfolded in a swirling robe of many colours above which you can only
+      -- `Welcome,` says one, a pale female figure enfolded in a swirling robe of many colours above which you can only
       see a perfectly smooth and hairless head. The robe shimmers, its colours shifting as she steps towards you,
       catching your mind before you realize what is happening. Looking into her face, you see an image of yourself,
       fighting for your life inside a huge temple. Then the image shifts and you see yourself leaving a walled city,
@@ -65,7 +65,7 @@
       knowledge, at another an infant, wise beyond his years. The metamorphosis through youth to age takes but a few
       instants, yet flows so smoothly you cannot see the features change. His voice is soft and ageless.
 
-      - `We have summoned you here to the world of Orb because we wish to prevent a fatal upset in the balance of nature.
+      -- `We have summoned you here to the world of Orb because we wish to prevent a fatal upset in the balance of nature.
       The cosmic scales have been tipped too far and you must play a part in righting them. It is not for us in the
       Garden of the Gods to set things right. We cannot fight him who would bring chaos to Orb. Rather we use men as our
       tools. I shall not say whether you will succeed.`
@@ -82,7 +82,7 @@
       with towers and spires, concealing the dives of assassins and thieves amongst the splendour. The eyeless immortal
       steps forward, her robe now the colour of the deep sea, and caresses your cheek.
 
-      - `We are sending you down to the surface of Orb. If you fall into the clutches of Death we cannot aid you. Do not
+      -- `We are sending you down to the surface of Orb. If you fall into the clutches of Death we cannot aid you. Do not
       fail us!`
     choices:
       BG-6: Next
@@ -91,12 +91,12 @@
     type: story
     image: BG-6.png
     text: >
-      - `Fail in what?` - you begin to ask. But just then, to your horror, you find yourself being drawn inexorably
+      -- `Fail in what?` - you begin to ask. But just then, to your horror, you find yourself being drawn inexorably
       towards a black crack in the map. The realization that your destiny is being tampered with angers you, and you
       resolve to find a way back to Earth and your home at any cost, As the world of Orb rises up to engulf you, the
       awesomeness of what is happening overwhelms you and you lose consciousness.
     choices:
-      1: "**NOW TURN OVER**"
+      1: "NOW TURN OVER"
 
   - id: 1
     type: location

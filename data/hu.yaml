@@ -25,11 +25,11 @@
       A madarat látszólag nem zavarja, kardforgató tudományod bemutatója, te viszont igencsak meglepődsz, mikor vidám,
       fuvolázó hangján megszólal.
 
-      - Köszöntelek, Végzet Bajnoka! Ne aggódj, egyelőre még biztonságban vagy.
-      - Hol vagyok? - kérded, mintha csak álom volna az egész.
-      - Attól tartok, messze, messze az otthonodtól. Ez itt az Orb, és az Istenek Kertjében vagy.
-      - Mi az az Orb? - kérded.
-      - Ó, az egészen más, mint a Föld; majd meglátod. Különös világ, tele csodákkal. Az emberek mellett nemcsak hozzám
+      -- Köszöntelek, Végzet Bajnoka! Ne aggódj, egyelőre még biztonságban vagy.
+      -- Hol vagyok? - kérded, mintha csak álom volna az egész.
+      -- Attól tartok, messze, messze az otthonodtól. Ez itt az Orb, és az Istenek Kertjében vagy.
+      -- Mi az az Orb? - kérded.
+      -- Ó, az egészen más, mint a Föld; majd meglátod. Különös világ, tele csodákkal. Az emberek mellett nemcsak hozzám
       hasonló beszélő állatok lakják, hanem hátborzongató és vérszomjas szörnyetegek, óriások, sárkányok és démonok is.
       A városokban mágusok és varázslók, a mágia nagy tudói élnek. De ne félj! Azért választottunk bajnokunknak, mert a
       földiek közül te vagy a legesélyesebb a sikerre. Most pedig eleget kell tennem a megbízatásomnak. Jöjj! Uraim
@@ -45,7 +45,8 @@
     text: >
       Hitetlenkedve elindulsz utána a kőlépcsőn. Egy nagy, kör alakú szobába érsz: két alak áll ott, akik jöttödre feléd
       fordulnak:
-      - Légy üdvözölve - mondja az egyikük, egy díszes lebernyegbe öltözött nőalak. A feje teljesen kopasz. Ahogy a nő
+      
+      -- Légy üdvözölve - mondja az egyikük, egy díszes lebernyegbe öltözött nőalak. A feje teljesen kopasz. Ahogy a nő
       feléd lép, csillogó ruhája folyton változtatja a színét; mielőtt rádöbbennél, hogy mi történik, már el is bájolt.
       Arcába nézve saját képmásodat pillantod meg, amint egy óriási templomban élethalálharcot vívsz.
 
@@ -64,7 +65,7 @@
       gyermek. Átalakulása mindössze néhány pillanatig tart, mégis olyan finoman történik mindez, hogy szinte észre sem
       lehet venni, hogy arcvonásai megváltoznak. Hangja lágy, nem érződik rajta a kora.
 
-      - Azért idéztünk meg ide, Orb földre - mondja -‚ mert meg kívánjuk akadályozni a természet egyensúlyának végzetes
+      -- Azért idéztünk meg ide, Orb földre - mondja -‚ mert meg kívánjuk akadályozni a természet egyensúlyának végzetes
       felborulását. A kozmikus mérleg túlságosan is felbillent, és neked is részt kell venned a visszaállításában! Mi
       itt, az Istenek Kertjében nem foglalkozhatunk azzal, hogy helyrehozzuk a dolgokat. Mi nem küzdhetünk meg azzal,
       aki káosszal fenyegeti az Orbot. Mi inkább az embereket használjuk fel erre a célra. De hogy sikerrel jársz-e,
@@ -83,7 +84,7 @@
       találkahelyül szolgáló rejtett pincék is vannak. A szem nélküli halhatatlan ekkor odalép hozzád, és megcirógatja az
       arcodat. Ruhája most olyan, akár a tenger kékje.
 
-      - Most leküldünk az Orb mélyébe - mondja. - Ha a Halál karmai közé kerülsz, nem segíthetünk rajtad. Ne okozz
+      -- Most leküldünk az Orb mélyébe - mondja. - Ha a Halál karmai közé kerülsz, nem segíthetünk rajtad. Ne okozz
       nekünk csalódást!
     choices:
       BG-6: Tovább
@@ -98,7 +99,7 @@
       Feldühít a felismerés, hogy sorsodat mások irányítják, s úgy határozol, hogy mindenáron visszatérsz otthonodba,
       a Földre. Orb világa azonban elnyel, s a félelemtől elveszted az eszméletedet.
     choices:
-      1: "**ÉS MOST LAPOZZ!**"
+      1: "ÉS MOST LAPOZZ!"
 
   - id: 1
     type: location
